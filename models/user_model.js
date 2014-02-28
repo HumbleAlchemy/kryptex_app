@@ -53,20 +53,22 @@ exports.adduser = function(db, user_email, user_password,user_name, user_ph_no){
 };
 
 /* MOdule for checking existance of user */
-exports.check_for_id = function(db, user_name){
+exports.check_for_id = function(db, user_name,callback){
 	db.exists("user:"+ user_name, function (err, status){
-		if(err) console.log("unable to fetch data at check_for_id");
-		return status;
+		if(err) 
+			console.log("unable to fetch data at check_for_id");
+		else
+			callback(null,status);
 	});
 };
 
 /*change user score */
-exports.increment_user_score = function(user_name) {
+exports.increment_user_score = function(user_name,callback) {
 	db.zincr(scoreSchema.set_name,1,user_name,function(err,status) {
 		if(!err) {
-			return 1;
+			callback(null,1);
 		} else {
-			return 0;
+			callback(err,null);
 		}
 	});
 }
@@ -76,16 +78,17 @@ exports.increment_user_score = function(user_name) {
 
 exports.check_user = function(db, user_name, user_password, callback){
 	db.hmget("user:"+user_name, userSchema.name, userSchema.password,function (err, user_detail){
-		if(err) console.log("ERR AT FETCHING DATA AT check_user");
+		if(err) 
+			console.log("ERR AT FETCHING DATA AT check_user");
 		else{
 			if( user_detail[0] == user_name ){
 				if( user_detail[1] == user_password ){
-					callback(0);
+					callback(null,0);
 				}else{
-					callback(2);
+					callback(null,2);
 				}
 			}else{
-				callback(1);
+				callback(null,1);
 			}
 		}
 	});
