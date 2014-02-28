@@ -8,7 +8,7 @@ var express = require('express');
 // var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
-
+var db = require("redis").createClient();
 var app = express();
 var RedisStore = require('connect-redis')(express);
 
@@ -41,8 +41,11 @@ if ('development' == app.get('env')) {
 
 // app.get('/', routes.index);
 // app.get('/users', user.list);
-require('./controllers/index')(app);
+require('./controllers/index')(app,db);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
+
+
+
