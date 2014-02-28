@@ -45,9 +45,8 @@ exports.adduser = function(db, user_email, user_password,user_name, user_ph_no,c
 						}
 					});
 				}
-
 			}
-		);	
+		);
 	}
 };
 
