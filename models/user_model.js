@@ -63,10 +63,17 @@ exports.check_for_id = function(db, user_name,callback){
 
 /*change user score */
 exports.increment_user_score = function(user_name,callback) {
-	db.zincr(scoreSchema.set_name,1,user_name,function(err,status) {
+	db.zincrby(scoreSchema.set_name,1,user_name,function(err,status) {
 		if(!err) {
 			callback(null,1);
 		} else {
+			db.hset("user:" + user_name,userSchema.current_level,status,function(err,status){
+				if(!err) {
+					callback(null,status);
+				} else {
+					callback(err,null);
+				}
+			});
 			callback(err,null);
 		}
 	});
