@@ -22,7 +22,7 @@ var scoreSchema = {
 
 
 /* MOdule for adding user details */
-exports.adduser = function(db, user_email, user_password,user_name, user_ph_no){
+exports.adduser = function(db, user_email, user_password,user_name, user_ph_no,callback){
 	if( check_for_user(db, user_name) == 0){
 		db.hmset("user:"+user_name,
 			userSchema.email, user_email, 
@@ -32,17 +32,16 @@ exports.adduser = function(db, user_email, user_password,user_name, user_ph_no){
 		    userSchema.current_level, 0,
 		    userSchema.wildcard_count, 2,
 			function (err, status){
-
 				if(err){
-					console.log("ËRR IN FETCHING DB AT adduser");
-					return 0;
+					console.log("ERR IN FETCHING DB AT adduser");
+					callback(err,null);
 				}else{
 					db.zadd( scoreSchema.set_name, 0, user_name, function (err, status){
 						if(err){
-							console.log("ËRR IN FETCHING DB AT adduser");
-							return 0;
+							console.log("ERR IN FETCHING DB AT adduser");
+							callback(err,null);
 						}else{
-							return 1;	
+							callback(null,1);
 						}
 					});
 				}
