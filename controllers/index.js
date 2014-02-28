@@ -8,28 +8,26 @@
 // };
 var User = require('../models/user_model.js');
 
-module.exports = function(app) {
+module.exports = function(app,db) {
 	app.get('/',function(req,res){
-		res.render('index' ,{title : 'Express'});
-	});
-
-	app.get('/login',function(req,res) {
-		res.render('login',{title:'Login'});
+		res.render('login' ,{title : 'Login'});
 	});
 
 	app.post('/signin',function(req,res) {
 		console.log('username: ' + req.body.username + 'password: ' + req.body.password);
-		User.checkUser(req.body.username,req.body.password,function(err,data) {
-			if(!err) {
-
+		User.check_user(db,	req.body.username,req.body.password,function(data) {
+			if( data == 0) {
 				//user has logged in, saved to session
 				req.session.isLoggedIn = true;
 				req.session.userId = req.body.username;
 				console.log('user ok! ' + req.session.isLoggedIn );
 				res.redirect('/test');
-			} else {
+			}else if( data == 1){
 				console.log('user wrong!');
-				res.redirect('/login');
+				res.redirect('/login',{title : "Wrong Username"});
+			}else{
+				console.log('password wrong!');
+				res.redirect('/login',{title : "Wrong Password"});
 			}
 		})
 	})
