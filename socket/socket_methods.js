@@ -33,9 +33,16 @@ module.exports = function (io, db) {
 								if(!err){
 									db.lindex( levelSchema.name, levelSchema.question_index, function (err, question_url){
 										if(!err){
-											socket.emit('next_level', question_url, current_level+1);
+											socket.emit('next_level', question_url, status);
+											db.zrevrange( scoreSchema.set_name, 0, 4, function (err, top_five){
+												if( !err ){
+													socket.broadcast.emit( 'update_leaderboard', top_five);		
+												}else{
+													console.log( "UNABLE TO FETCH FROM DB AT check_answer INSIDE socket_methods.js");
+												}
+											});		
 										}else{
-											console.log('UNABLE TO FETCH FROM DB AT check_answer INSIDE socket_methods.js');
+											console.log('UNABLE TO FETCH FROM DB AT use_wildcard INSIDE socket_methods.js');
 										}
 									});
 								}else{
@@ -63,7 +70,14 @@ module.exports = function (io, db) {
 							if(!err){
 								db.lindex( levelSchema.name, levelSchema.question_index, function (err, question_url){
 									if(!err){
-										socket.emit('next_level', question_url, current_level+1);
+										socket.emit('next_level', question_url, status);
+										db.zrevrange( scoreSchema.set_name, 0, 4, function (err, top_five){
+											if( !err ){
+												socket.broadcast.emit( 'update_leaderboard', top_five);		
+											}else{
+												console.log( "UNABLE TO FETCH FROM DB AT check_answer INSIDE socket_methods.js");
+											}
+										});		
 									}else{
 										console.log('UNABLE TO FETCH FROM DB AT use_wildcard INSIDE socket_methods.js');
 									}
