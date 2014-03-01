@@ -2,7 +2,8 @@
 // exports.index = function(req, res){
 //   res.render('index', { title: 'Express' });
 // };
-var User = require('../models/user_model.js');
+var User = require('../models/user_model');
+var Level = require('../models/level_model');
 var util = require('../lib/hash');
 module.exports = function(app,db) {
 
@@ -28,10 +29,18 @@ module.exports = function(app,db) {
 		var digest = util.get_hash( user_name);
 		User.get_current_level_and_wildcard_count( db, user_name, function ( err, current_level_wildcard_count){
 			if( !err ){
-				res.render('problem_window', { user_name : user_name,
-					digest : digest, 
-					current_level : current_level_wildcard_count[0],
-				 	wildcard_count : current_level_wildcard_count[1] 
+				Level.get_level_image( current_level_wildcard_count[0], db, function (problem_image){
+					if( !problem_image ){
+						console.log("can't get image in problem_window for " +  user_name);
+						res.redirect('/');
+					}else{
+						res.render('problem_window', { user_name : user_name,
+							digest : digest, 
+							current_level : current_level_wildcard_count[0],
+						 	wildcard_count : current_level_wildcard_count[1],
+						 	image :  problem_image
+						});
+					}	
 				});
 			}else{
 				res.redirect('/');

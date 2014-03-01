@@ -61,7 +61,7 @@ exports.adduser = function(db,user_email,user_password,user_name,user_ph_no,call
 /* Module for getting user current level */
 
 exports.get_current_level_and_wildcard_count = function( db, user_name, callback){
-	db.hget( userSchema.set_name + user_name, userSchema.current_level, userSchema.wildcard_count,  function ( err, leveldev){
+	db.hmget( userSchema.set_name + user_name, userSchema.current_level, userSchema.wildcard_count,  function ( err, leveldev){
 		if( !err ){
 			callback( null, leveldev);
 		}else{

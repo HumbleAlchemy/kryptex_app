@@ -33,19 +33,5 @@
             </form>
         </div>
     </body>
-    <script>
-        var $j = jQuery.noConflict();
-        socket.on('end',function(){
-            $j('#frm').submit();
-        });
-        
-        $j(function(){
-            socket.emit('storeme','<%= title%>');
-            startTime();
-            $j('#btn').click(function(){
-                $j('#time').val( seconds_left * 1000 );
-                socket.emit('nofault','<%= title %>');
-            });
-        });
-    </script>
+    
 </html>
