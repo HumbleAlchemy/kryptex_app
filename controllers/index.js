@@ -32,9 +32,13 @@ module.exports = function(app,db) {
 		})
 	})
 
-	app.get('/test',isLoggedIn, function(req,res) {
-		res.send('logged in user: ' + req.session.id);
+	app.get('/test' /* ,isLoggedIn */ , function(req,res) {
+		//res.send('logged in user: ' + req.session.id);
+		res.render('test',{message : 'message for you!'});
 	});
+
+
+
 }
 
 // route middleware to make sure a user is logged in

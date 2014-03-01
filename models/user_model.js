@@ -50,7 +50,7 @@ exports.adduser = function(db, user_email, user_password,user_name, user_ph_no,c
 	}
 };
 
-/* MOdule for checking existance of user */
+/* Module for checking existance of user */
 exports.check_for_id = function(db, user_name,callback){
 	db.exists("user:"+ user_name, function (err, status){
 		if(err) 

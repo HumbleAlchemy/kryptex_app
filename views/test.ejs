@@ -1,0 +1,28 @@
+<html>
+	<head>
+		<!-- Obtain Bootstrap style sheet from CDN (online service) so it doesn't have to be on my machine -->
+		<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet" media="screen">    
+	</head>
+	<body>
+		
+		<div class="flash">
+		<% if(typeof message !== 'undefined') { %>
+			<%= message %>
+		<% } %>
+		</div>
+		<!-- Obtain latest version of jquery automatically from online server so it doesn't have to be on my machine -->
+		<script src="http://code.jquery.com/jquery-latest.js"></script>
+		<!-- Obtain Bootstrap javascript from CDN (online service) so it doesn't have to be on my machine -->
+		<script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
+		<script type="text/javascript">
+			function hideFlashMessages() {
+			  $(this).fadeOut();
+			}
+
+			setTimeout(function() {
+			  $('.flash').each(hideFlashMessages);
+			}, 1000);
+			$('.flash').click(hideFlashMessages);
+		</script>
+	</body>
+</html>
