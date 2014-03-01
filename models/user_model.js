@@ -7,6 +7,8 @@
 
 /*  keys for redis hashset */
 var crypto = require('crypto');
+var util = require('../lib/hash');
+
 var userSchema = {
 	name : "name",
 	password : "password",
@@ -26,7 +28,7 @@ exports.adduser = function(db, user_email, user_password,user_name, user_ph_no,c
 	if( check_for_user(db, user_name) == 0){
 		db.hmset("user:"+user_name,
 			userSchema.email, user_email, 
-			userSchema.password, user_password,
+			userSchema.password, util.get_hash(user_password),
 		  	userSchema.name, user_name,
 		   	userSchema.ph_no, user_ph_no,
 		    userSchema.current_level, 0,
@@ -87,7 +89,7 @@ exports.check_user = function(db, user_name, user_password, callback){
 			console.log("ERR AT FETCHING DATA AT check_user");
 		else{
 			if( user_detail[0] == user_name ){
-				if( user_detail[1] == user_password ){
+				if(util.check_hash(user_password,user_detail[1]){
 					callback(null,0);
 				}else{
 					callback(null,2);
@@ -100,17 +102,5 @@ exports.check_user = function(db, user_name, user_password, callback){
 };
 
 
-function getHash(password) {
-	var sha2 = crypto.createHash('sha256');
-	var hash = sha2.update(password).digest('hex');
-	console.log("hash: " + hash );
-	return hash;
-} 
-
-function matchHash(password,hash) {
-	var sha2 = crypto.createHash('sha256');
-	var input_hash = sha2.update(password).digest('hex');
-	return input_hash == hash;
-}
 
 
