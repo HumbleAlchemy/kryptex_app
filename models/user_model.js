@@ -23,23 +23,39 @@ var scoreSchema = {
 };
 
 
- // MOdule for adding user details  exports.adduser = function(db, user_email,
-user_password,user_name, user_ph_no,callback){     check_for_id(db,
-user_name,function (err, status){         if( !err) {             if( status
-== 0 ){                 db.hmset("user:"+user_name,
-userSchema.email, user_email,                      userSchema.password,
-util.get_hash(user_password),                     userSchema.name, user_name,
-userSchema.ph_no, user_ph_no,                     userSchema.current_level, 0,
-userSchema.wildcard_count, 2,                     function (err, status){
-if(err){                             console.log("ERR IN FETCHING DB AT
-adduser");                             callback(err,null);
-}else{                             db.zadd( scoreSchema.set_name, 0,
-user_name, function (err, status){                                 if(err){
-console.log("ERR IN FETCHING DB AT adduser");
-callback(err,null);                                 }else{
-callback(null,1);                                 }
-});                         }                 });             }else{
-console.log("hehe");             }         }     });      };
+ // MOdule for adding user details  
+exports.adduser = function(db,user_email,user_password,user_name,user_ph_no,callback) {
+	db.exists("users:" + user_name,function(err,result){
+		if(!err) {
+			if(result == 0) {
+				db.hmset("user:" + user_name,
+					userSchema.email,user_email,
+					userSchema.password,util.get_hash(user_password),
+					userSchema.name,user_name,
+					userSchema.ph_no, user_ph_no,
+					userSchema.current_level,0,
+					userSchema.wildcard_count,2, 
+					function(err,data){
+						if(!err) {
+							db.zadd(scoreSchema.set_name,0,"user:" + user_name,function(err,status){
+								if(!err) {
+									console.log("successfully registered!");
+									callback(null,1);
+								} else {
+									console.log("ERR in db.zadd in addUser");
+								}
+							});
+						} else {
+							console.log("ERR in db.hmset in addUser");
+							//callback(err,null);
+						}
+					});
+			}
+		} else {
+			console.log("ERR in from check_for_id");
+		}
+	});
+}
 
 
 /*exports.adduser = function(db, user_email, user_password,user_name, user_ph_no,callback){
@@ -74,7 +90,7 @@ console.log("hehe");             }         }     });      };
 }
 */
 /* Module for checking existance of user */
-function check_for_id(db, user_name){
+exports.check_for_id = function(db, user_name,callback){
 	db.exists("user:"+ user_name, function (err, status){
 		if(!err){
 			console.log("status here: " + status);
@@ -82,14 +98,14 @@ function check_for_id(db, user_name){
 		} 
 		else {
 			console.log("unable to fetch data at check_for_id");
-			//callback(err,null);
+			callback(err,null);
 		}			
 	});
 };
 
 /*change user score */
 
-exports.check_for_id = check_for_id;
+
 
 exports.increment_user_score = function(user_name,callback) {
 	db.zincrby(scoreSchema.set_name,1,user_name,function(err,status) {

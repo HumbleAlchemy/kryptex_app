@@ -80,9 +80,11 @@ module.exports = function (io, db) {
 		});
 
 		socket.on('check_for_user_name',function (user_name){
-			if( User.check_for_id(db, user_name) == 0 ){
+			User.check_for_id(db, user_name,function(err,status){
+				console.log("from socket: " + status);
+			});
 				
-			}
+			
 		});
 
 
