@@ -26,7 +26,7 @@ module.exports = function(app,db) {
 	app.get('/problem_window' ,isLoggedIn , function ( req, res) {
 		var user_name = req.session.userId;
 		var digest = util.get_hash( user_name);
-		User.get_current_level_and_wildcard_count( user_name, function ( err, current_level_wildcard_count){
+		User.get_current_level_and_wildcard_count( db, user_name, function ( err, current_level_wildcard_count){
 			if( !err ){
 				res.render('problem_window', { user_name : user_name,
 					digest : digest, 
