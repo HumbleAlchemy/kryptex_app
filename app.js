@@ -4,14 +4,26 @@
  */
 
 var express = require('express');
-// var routes = require('./routes');
-// var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
 var db = require("redis").createClient();
 var app = express();
 var RedisStore = require('connect-redis')(express);
+//socket.io
 
+var io = require('socket.io').listen(server);
+io.enable('browser client minification'); // send minified client
+io.enable('browser client etag'); // apply etag caching logic based on version number
+io.enable('browser client gzip'); // gzip the file
+io.set('log level', 1);
+io.set('browser client expires',315360000); // reduce logging
+io.set('transports', [ // enable all transports (optional if you want flashsocket)
+    'websocket'
+  , 'flashsocket'
+  , 'htmlfile'
+  , 'xhr-polling'
+  , 'jsonp-polling'
+]);
 // all environments
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
@@ -39,9 +51,8 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-// app.get('/', routes.index);
-// app.get('/users', user.list);
-require('./controllers/index')(app,db);
+require('./controllers/master')(app,db);
+require('./socket/socket_methods')(io,db);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
