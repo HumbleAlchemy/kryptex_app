@@ -5,9 +5,7 @@
 		<link href="stylesheet/button.css" rel="stylesheet">
 		<link href="stylesheet/signin.css" rel="stylesheet">
 		<link rel= 'stylesheet' href='bootstrap/css/bootstrap.min.css'  type='text/css'/>
-		<script src="http://code.jquery.com/jquery-latest.js"></script>
-		<!-- Obtain Bootstrap javascript from CDN (online service) so it doesn't have to be on my machine -->
-		<script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
+		<<script src="js/all.js"></script>
 		<script src="/socket.io/socket.io.js"></script>
 	</head>
 	<body background="img/escheresque_ste.png">
@@ -46,7 +44,7 @@
 							<input type="text" placeholder="email-id" name="user_email" id="eid" class="form-control" style="padding:10px;margin-bottom: 10px;background: rgba(54, 25, 25, 0);color:#fff" required>
 						</div>
 						<div class="has-feedback" id="fd">
-						<input type="text" placeholder="contact info" class="form-control" id="ph_no" name="user_ph_no" style="padding:10px;margin-bottom: 10px;background: rgba(54, 25, 25, 0);color:#fff" required>
+							<input type="text" placeholder="contact info" class="form-control" id="ph_no" name="user_ph_no" style="padding:10px;margin-bottom: 10px;background: rgba(54, 25, 25, 0);color:#fff" required>
 						</div>
 						<div class="has-feedback" id="pass">
 							<input type="password" placeholder="password" class="form-control" id="passwd" name="user_password" style="padding:10px;background: rgba(54, 25, 25, 0);color:#fff" required>
@@ -76,28 +74,32 @@
 	                }
 	            });
 	            $j('#uid').blur(function(){
-	                    var name = $j('#uid').val();
-	                    socket.emit('check_for_user_name',name);    
+                    var name = $j('#uid').val();
+                    socket.emit('check_for_user_name',name);   
+            	});
+	            $j('#ph_no').blur(function(){
+	                var len = $j('#ph_no').val().length;
+	            	if( len != 10){
+	            		$j('#fd').addClass('has-error');
+	            		$j('#ph_no').val('');
+	            	}        
 	            });
 	         
 	            $j('#uid').click(function (){
 	            	$j('#ud').removeClass('has-error');
 	            	
 	            });
+	            $j('#ph_no').click(function (){
+	            	$j('#fd').removeClass('has-error');
+	            	
+	            });
 	        	
 
 	        });
 
-	        socket.on('tell',function(val){
+	        socket.on('invalid_user_name',function(val){
 	            $j('#ud').addClass('has-error');
 	            $j('#uid').val('');
-	        });
-	        socket.on('tell-email',function(val){
-	            $j('#ed').addClass('has-error');
-	            $j('#eid').val('');
-	        });
-		    socket.on('forward',function(){
-	            $j('#signup').submit();
 	        });
 		</script>
 </html>
