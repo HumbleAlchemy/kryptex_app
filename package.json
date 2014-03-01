@@ -9,8 +9,6 @@
     "express": "3.4.8",
     "ejs": "*",
     "connect-redis" : "*",
-    "socket.io" : "0.9.16",
-    "bcrypt" : "latest",
-    "nodemon" : "latest"
+    "socket.io" : "0.9.16"
   }
 }
