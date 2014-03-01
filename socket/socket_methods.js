@@ -24,7 +24,7 @@ module.exports = function (io, db) {
 	io.sockets.on("connection", function (socket){
 
 		socket.on('check_answer', function ( user_name, digest, current_level, user_answer){
-			var user_digest = hash.get_hash( user_name );\
+			var user_digest = hash.get_hash( user_name );
 			if( user_digest == digest ){
 				db.lindex( levelSchema.name + current_level , levelSchema.solution_index, function (err, solution){
 					if(!err){
