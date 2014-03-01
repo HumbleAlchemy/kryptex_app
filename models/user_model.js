@@ -10,6 +10,7 @@ var crypto = require('crypto');
 var util = require('../lib/hash');
 
 var userSchema = {
+	set_name : "user:"
 	name : "name",
 	password : "password",
 	ph_no : "ph_no",
@@ -25,10 +26,10 @@ var scoreSchema = {
 
  // MOdule for adding user details  
 exports.adduser = function(db,user_email,user_password,user_name,user_ph_no,callback) {
-	db.exists("users:" + user_name,function(err,result){
+	db.exists( userSchema.set_name + user_name,function(err,result){
 		if(!err) {
 			if(result == 0) {
-				db.hmset("user:" + user_name,
+				db.hmset(userSchema.set_name + user_name,
 					userSchema.email,user_email,
 					userSchema.password,util.get_hash(user_password),
 					userSchema.name,user_name,
@@ -57,41 +58,24 @@ exports.adduser = function(db,user_email,user_password,user_name,user_ph_no,call
 	});
 }
 
+/* Module for getting user current level */
 
-/*exports.adduser = function(db, user_email, user_password,user_name, user_ph_no,callback){
-	var status = check_for_id(db,user_email);
-	if( status == 0 ){
-		db.hmset("user:"+user_name,
-			userSchema.email, user_email, 
-			userSchema.password, util.get_hash(user_password),
-			userSchema.name, user_name,
-			userSchema.ph_no, user_ph_no,
-			userSchema.current_level, 0,
-			userSchema.wildcard_count, 2,
-			function (err, status){
-				if(err){
-					console.log("ERR IN FETCHING DB AT adduser");
-					callback(err,null);
-				}else{
-					db.zadd( scoreSchema.set_name, 0, user_name, function (err, status){
-						if(err){
-							console.log("ERR IN FETCHING DB AT adduser");
-							callback(err,null);
-						}else{
-							callback(null,1);
-						}
-					});
-				}
-		});
-	}
-	else{
-		console.log("status inside adduser: " + status);
-	}	
-}
-*/
+exports.get_current_level = function( db, user_name, callback){
+	db.hget( userSchema.set_name + user_name, current_level, function ( err, level){
+		if( !err ){
+			callback( null, level);
+		}else{
+			console.log("unable to fetch data at get_current_level");
+			callback(err,null);
+		}
+	});
+};
+
+
 /* Module for checking existance of user */
+
 exports.check_for_id = function(db, user_name,callback){
-	db.exists("user:"+ user_name, function (err, status){
+	db.exists( userSchema.set_name + user_name, function (err, status){
 		if(!err){
 			console.log("status here: " + status);
 			callback(null,status);
@@ -112,7 +96,7 @@ exports.increment_user_score = function(user_name,callback) {
 		if(!err) {
 			callback(null,1);
 		} else {
-			db.hset("user:" + user_name,userSchema.current_level,status,function(err,status){
+			db.hset( userSchema.set_name + user_name,userSchema.current_level,status,function(err,status){
 				if(!err) {
 					callback(null,status);
 				} else {
@@ -128,7 +112,7 @@ exports.increment_user_score = function(user_name,callback) {
 /* Module for password checking */
 
 exports.check_user = function(db, user_name, user_password, callback){
-	db.hmget("user:"+user_name, userSchema.name, userSchema.password,function (err, user_detail){
+	db.hmget( userSchema.set_name + user_name, userSchema.name, userSchema.password,function (err, user_detail){
 		if(err) {
 			console.log("ERR AT FETCHING DATA AT check_user");
 			callback(err,null);

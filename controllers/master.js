@@ -3,7 +3,7 @@
 //   res.render('index', { title: 'Express' });
 // };
 var User = require('../models/user_model.js');
-
+var util = require('../lib/hash');
 module.exports = function(app,db) {
 
 	/*     GET ROUTES      */
@@ -16,8 +16,16 @@ module.exports = function(app,db) {
 		res.render('login', { title : req.param('title')});
 	});
 
-	app.get('/problem_window' ,isLoggedIn , function(req,res) {
-		res.render('problem_window', { user_name : req.session.userId});
+	app.get('/problem_window' ,isLoggedIn , function ( req, res) {
+		var user_name = req.session.userId;
+		var digest = util.get_hash( user_name);
+		User.get_current_level( user_name, function ( err, current_level){
+			if( !err ){
+				res.render('problem_window', { user_name : user_name, digest : digest, current_level : current_level });
+			}else{
+				res.send(404);
+			}
+		});
 	});
 
 	app.get('/rules_info', function (req, res){
