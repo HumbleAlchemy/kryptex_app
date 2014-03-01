@@ -157,6 +157,18 @@ exports.use_wildcard = function(db,user_name,callback) {
 	});
 }
 
+// gets the number of wildcards left with user
+exports.get_wildcard_count = function(db,user_name,callback) {
+	db.hget(userSchema.set_name + user_name,userSchema.wildcard_count,function(err,count){
+		if(!err) {
+			callback(null,count);
+		} else {
+			console.log("ERR in get_wildcard_count");
+			callback(err,null);
+		}
+	});
+}
+
 
 
 
