@@ -60,10 +60,10 @@ exports.adduser = function(db,user_email,user_password,user_name,user_ph_no,call
 
 /* Module for getting user current level */
 
-exports.get_current_level = function( db, user_name, callback){
-	db.hget( userSchema.set_name + user_name, current_level, function ( err, level){
+exports.get_current_level_and_wildcard_count = function( db, user_name, callback){
+	db.hget( userSchema.set_name + user_name, userSchema.current_level, userSchema.wildcard_count,  function ( err, leveldev){
 		if( !err ){
-			callback( null, level);
+			callback( null, leveldev);
 		}else{
 			console.log("unable to fetch data at get_current_level");
 			callback(err,null);

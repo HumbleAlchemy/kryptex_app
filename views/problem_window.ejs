@@ -1,0 +1,51 @@
+<html>
+    <head>
+        <meta charset="utf-8"> 
+        <link rel= 'stylesheet' href='bootstrap/css/bootstrap.css'  type='text/css'/>
+        <script src='js/all.js'></script>
+        <script src="/socket.io/socket.io.js"></script>
+    </head>
+    <body background="/img/dirty_old_shirt.png">
+        <div class="container" >
+            <form role="form" method="post" id="frm">
+                <div> WELCOME <%= user_name %></div>
+                <div class="row">
+                    <div class="col-lg-7">
+                        <img src='<%= image %>' id='problem' style="height:450px;" >
+                    </div>
+                    <div class="col-lg-5" style='background: rgba(54, 25, 25, 0.2);color:#fff'>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-7">
+                        <input type='text' id='user_solution' placeholder='INSERT YOUR ANSWER HERE IN CAPITAL WITHOUT SPACES'>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="col-lg-6">
+                            <button class='btn btn-lg btn-default' id='submit_solution'> SUBMIT </button>
+                        </div>
+                        <div class="col-lg-6">
+                            <button class='btn btn-lg btn-primary' id='use_wildcard'> Use Wildcard </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </body>
+    <script>
+        var $j = jQuery.noConflict();
+        socket.on('end',function(){
+            $j('#frm').submit();
+        });
+        
+        $j(function(){
+            socket.emit('storeme','<%= title%>');
+            startTime();
+            $j('#btn').click(function(){
+                $j('#time').val( seconds_left * 1000 );
+                socket.emit('nofault','<%= title %>');
+            });
+        });
+    </script>
+</html>

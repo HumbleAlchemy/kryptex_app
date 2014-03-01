@@ -13,17 +13,28 @@ module.exports = function(app,db) {
 	});
 
 	app.get('/login', function  ( req, res) {
-		res.render('login', { title : req.param('title')});
+		if (!req.param('title')){
+			res.render('login', { title : 'login', user_name : ""});
+		}else if(!req.param('user_name')){
+			res.render('login', { title : req.param('title')});	
+		}else{
+			res.render('login', { title : req.param('title'), user_name : req.param('user_name')});
+		}
+		
 	});
 
 	app.get('/problem_window' ,isLoggedIn , function ( req, res) {
 		var user_name = req.session.userId;
 		var digest = util.get_hash( user_name);
-		User.get_current_level( user_name, function ( err, current_level){
+		User.get_current_level_and_wildcard_count( db, user_name, function ( err, current_level_wildcard_count){
 			if( !err ){
-				res.render('problem_window', { user_name : user_name, digest : digest, current_level : current_level });
+				res.render('problem_window', { user_name : user_name,
+					digest : digest, 
+					current_level : current_level_wildcard_count[0],
+				 	wildcard_count : current_level_wildcard_count[1] 
+				});
 			}else{
-				res.send(404);
+				res.redirect('/');
 			}
 		});
 	});
@@ -44,15 +55,15 @@ module.exports = function(app,db) {
 			if( data == 0) {
 				//user has logged in, saved to session
 				req.session.isLoggedIn = true;
-				req.session.userId = req.body.username;
+				req.session.userId = req.param('user_name');
 				console.log('user ok! ' + req.session.isLoggedIn );
 				res.redirect('/problem_window');
 			}else if( data == 1){
 				console.log('user wrong!');
-				res.redirect('/login',{title : "Wrong Username"});
+				res.redirect('/login?title="Wrong Username"');
 			}else{
 				console.log('password wrong!');
-				res.redirect('/login',{title : "Wrong Password"});
+				res.redirect( '/login?title="Wrong Password"&user_name=' + req.param('user_name'));
 			}
 		});
 	});
