@@ -7,8 +7,13 @@ var User = require('../models/user_model.js');
 module.exports = function(app,db) {
 
 	/*     GET ROUTES      */
+
 	app.get('/',function(req,res){
 		res.render('first');
+	});
+
+	app.get('/login', function  ( req, res) {
+		res.render('login', { title : req.param('title')});
 	});
 
 	app.get('/problem_window' ,isLoggedIn , function(req,res) {
@@ -26,8 +31,8 @@ module.exports = function(app,db) {
 	/*    POST ROUTES       */
 
 	app.post('/signin',function(req,res) {
-		console.log('username: ' + req.body.username + 'password: ' + req.body.password);
-		User.check_user(db,	req.body.username,req.body.password,function(err,data) {
+		console.log('username: ' + req.param('user_name') + 'password: ' + req.param('user_password'));
+		User.check_user(db,	req.param('user_name'), req.param('user_password'),function(err,data) {
 			if( data == 0) {
 				//user has logged in, saved to session
 				req.session.isLoggedIn = true;
