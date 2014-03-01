@@ -27,7 +27,7 @@ module.exports = function(app,db) {
 
 	app.post('/signin',function(req,res) {
 		console.log('username: ' + req.body.username + 'password: ' + req.body.password);
-		User.check_user(db,	req.body.username,req.body.password,function(data) {
+		User.check_user(db,	req.body.username,req.body.password,function(err,data) {
 			if( data == 0) {
 				//user has logged in, saved to session
 				req.session.isLoggedIn = true;
@@ -41,7 +41,7 @@ module.exports = function(app,db) {
 				console.log('password wrong!');
 				res.redirect('/login',{title : "Wrong Password"});
 			}
-		})
+		});
 	});
 
 	app.post('/signup',function (req, res){
@@ -65,7 +65,17 @@ module.exports = function(app,db) {
 	});
 
 	app.post('/admin/signin',function(req,res){
-		User.check_user(db,	req.body.username,req.body.password,function(data)
+		User.check_user(db,	req.body.username,req.body.password,function(err,data) {
+			if(!err) {
+				res.redirect('/admin/dashboard');
+			} else {
+				consol.log("ERR in msater.js /admin/signin");
+			}
+		});
+	});
+
+	app.get('/admin/dashboard',function(req,res) {
+		res.render('admin_dashboard');
 	});
 
 

@@ -87,11 +87,12 @@ exports.check_user = function(db, user_name, user_password, callback){
 	db.hmget("user:"+user_name, userSchema.name, userSchema.password,function (err, user_detail){
 		if(err) {
 			console.log("ERR AT FETCHING DATA AT check_user");
+			callback(err,null);
 		}
 			
 		else{
 			if( user_detail[0] == user_name ){
-				if(util.check_hash(user_password,user_detail[1]){
+				if(util.check_hash(user_password,user_detail[1])){
 					callback(null,0);
 				}else{
 					callback(null,2);
