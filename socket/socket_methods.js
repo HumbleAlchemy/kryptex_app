@@ -82,6 +82,9 @@ module.exports = function (io, db) {
 		socket.on('check_for_user_name',function (user_name){
 			User.check_for_id(db, user_name,function(err,status){
 				console.log("from socket: " + status);
+				if( status == 1 ){
+					socket.emit( 'invalid_user_name');
+				}
 			});
 				
 			
