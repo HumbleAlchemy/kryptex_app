@@ -9,9 +9,12 @@ var path = require('path');
 var db = require("redis").createClient();
 var app = express();
 var RedisStore = require('connect-redis')(express);
+var server = http.createServer(app).listen(app.get('port'));
+var io = require('socket.io').listen(server);
+
 //socket.io
 
-var io = require('socket.io').listen(app);
+var io = require('socket.io').listen(server);
 io.enable('browser client minification'); // send minified client
 io.enable('browser client etag'); // apply etag caching logic based on version number
 io.enable('browser client gzip'); // gzip the file
@@ -24,6 +27,7 @@ io.set('transports', [ // enable all transports (optional if you want flashsocke
   , 'xhr-polling'
   , 'jsonp-polling'
 ]);
+
 // all environments
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
@@ -54,9 +58,7 @@ if ('development' == app.get('env')) {
 require('./controllers/master')(app,db);
 require('./socket/socket_methods')(io,db);
 
-http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
-});
+
 
 
 
