@@ -46,7 +46,7 @@ module.exports = function(app,db) {
 
 	app.post('/signup',function (req, res){
 		console.log("");
-		User.adduser(db, req.params('user_email'),req.params("user_password"),req.params("user_name"),req.params("user_ph_no"),function (err, status){
+		User.adduser(db, req.param('user_email'),req.param("user_password"),req.param("user_name"),req.param("user_ph_no"),function (err, status){
 			if(!err){
 				res.redirect("/rules_info");
 			}else{

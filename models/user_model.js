@@ -25,35 +25,40 @@ var scoreSchema = {
 
 /* MOdule for adding user details */
 exports.adduser = function(db, user_email, user_password,user_name, user_ph_no,callback){
-	if( check_for_user(db, user_name) == 0){
-		db.hmset("user:"+user_name,
-			userSchema.email, user_email, 
-			userSchema.password, util.get_hash(user_password),
-		  	userSchema.name, user_name,
-		   	userSchema.ph_no, user_ph_no,
-		    userSchema.current_level, 0,
-		    userSchema.wildcard_count, 2,
-			function (err, status){
-				if(err){
-					console.log("ERR IN FETCHING DB AT adduser");
-					callback(err,null);
-				}else{
-					db.zadd( scoreSchema.set_name, 0, user_name, function (err, status){
+	check_for_id(db, user_name,function (err, status){
+		if( !err) {
+			if( status == 0 ){
+				db.hmset("user:"+user_name,
+					userSchema.email, user_email, 
+					userSchema.password, util.get_hash(user_password),
+					userSchema.name, user_name,
+					userSchema.ph_no, user_ph_no,
+					userSchema.current_level, 0,
+					userSchema.wildcard_count, 2,
+					function (err, status){
 						if(err){
 							console.log("ERR IN FETCHING DB AT adduser");
 							callback(err,null);
 						}else{
-							callback(null,1);
+							db.zadd( scoreSchema.set_name, 0, user_name, function (err, status){
+								if(err){
+									console.log("ERR IN FETCHING DB AT adduser");
+									callback(err,null);
+								}else{
+									callback(null,1);
+								}
+							});
 						}
-					});
-				}
+				});
+			}else{
+
 			}
-		);
-	}
+		}
+	});		
 };
 
 /* Module for checking existance of user */
-exports.check_for_id = function(db, user_name,callback){
+var  check_for_id = function (db, user_name,callback){
 	db.exists("user:"+ user_name, function (err, status){
 		if(err) 
 			console.log("unable to fetch data at check_for_id");
@@ -62,6 +67,7 @@ exports.check_for_id = function(db, user_name,callback){
 	});
 };
 
+exports.check_for_id = check_for_id;
 /*change user score */
 exports.increment_user_score = function(user_name,callback) {
 	db.zincrby(scoreSchema.set_name,1,user_name,function(err,status) {

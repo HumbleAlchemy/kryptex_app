@@ -5,7 +5,9 @@
 		<link href="stylesheet/button.css" rel="stylesheet">
 		<link href="stylesheet/signin.css" rel="stylesheet">
 		<link rel= 'stylesheet' href='bootstrap/css/bootstrap.min.css'  type='text/css'/>
-		<script src="all.js"></script>
+		<script src="http://code.jquery.com/jquery-latest.js"></script>
+		<!-- Obtain Bootstrap javascript from CDN (online service) so it doesn't have to be on my machine -->
+		<script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
 		<script src="/socket.io/socket.io.v0.9.9.js"></script>
 	</head>
 	<body background="img/escheresque_ste.png">
@@ -19,18 +21,7 @@
 						</div>
 					    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					      	<form class="navbar-form navbar-right" action='/login'>
-	      		      		  	<button type="button" class="btn btn-inverse dropdown-toggle" data-toggle="dropdown" style="background: rgba(54, 25, 25, 0);color:#fff">
-	      		      		    	<span style="font:Purisa Bold" class="glyphicon glyphicon-user"></span> Guest 
-	      		      		    	<span class="caret"></span>
-	      		      		  	</button>
-	      		      		  	<ul class="dropdown-menu">
-	      		      		    	<li >
-	      		      		    		<a href="/tour" >
-	      		      		    			<span class="glyphicon glyphicon-home"></span> Take A Tour
-	      		      		    		</a>
-	      		      		    	</li>
-	      					  	</ul>
-					      		<button type="submit" class="btn navbar-btn btn-inverse" style="margin-left:7px">
+	      		      		  	<button type="submit" class="btn navbar-btn btn-inverse" style="margin-left:7px">
 					      			<span class="glyphicon glyphicon-log-in"></span> Sign In
 					      		</button>
 					      	</form>
@@ -46,7 +37,7 @@
 				</div>
 				<div class="col-lg-2"></div>
 				<div class="col-lg-6 has-feedback">
-					<form class="form-signin " role="form" method="post" action="/signin" style="margin-padding: 20px;">
+					<form class="form-signin " role="form" method="post" action="/signup" style="margin-padding: 20px;">
 						<h3 class="form-signin-heading"> SIGN-UP</h3>
 						<div class="has-feedback" id="ud">
 							<input type="text" placeholder="pick a username"  name="user_name" id="uid" class="form-control" style="padding:10px;margin-bottom: 10px;background: rgba(54, 25, 25, 0);color:#fff" required autofocus>
@@ -54,10 +45,12 @@
 						<div class="has-feedback" id="ed">
 							<input type="text" placeholder="email-id" name="user_email" id="eid" class="form-control" style="padding:10px;margin-bottom: 10px;background: rgba(54, 25, 25, 0);color:#fff" required>
 						</div>
+						<div class="has-feedback" id="fd">
+						<input type="text" placeholder="contact info" class="form-control" id="ph_no" name="user_ph_no" style="padding:10px;margin-bottom: 10px;background: rgba(54, 25, 25, 0);color:#fff" required>
+						</div>
 						<div class="has-feedback" id="pass">
-							<input type="text" placeholder="contact info" class="user_ph_no" id="passwd" name="passwd" style="padding:10px;background: rgba(54, 25, 25, 0);color:#fff"required>
-							<input type="password" placeholder="password" class="user_password" id="passwd" name="passwd" style="padding:10px;background: rgba(54, 25, 25, 0);color:#fff"required>
-							<input type="password" placeholder="confirm password" class="form-control" id="xpasswd" name="xpasswd" style="padding:10px;background: rgba(54, 25, 25, 0);color:#fff"required>
+							<input type="password" placeholder="password" class="form-control" id="passwd" name="user_password" style="padding:10px;background: rgba(54, 25, 25, 0);color:#fff" required>
+							<input type="password" placeholder="confirm password" class="form-control" id="xpasswd" name="xpasswd" style="padding:10px;background: rgba(54, 25, 25, 0);color:#fff" required>
 						<div>
 						<button type="submit" class=" form-control btn btn-custom" id="siu"> <span class="glyphicon glyphicon-user"></span>  Sign Up </button>
 					</form>	
@@ -70,6 +63,7 @@
 	</body>
 	<script>
 	        var socket = io.connect();
+	        var $j = jQuery.noConflict();
 	        $j(function(){
 	        	$j('#siu').click(function(){
 	                var user = $j('#uid').val();
