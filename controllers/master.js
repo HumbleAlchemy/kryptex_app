@@ -8,7 +8,7 @@ module.exports = function(app,db) {
 
 	/*     GET ROUTES      */
 	app.get('/',function(req,res){
-		res.render('login' ,{title : 'Login'});
+		res.render('first');
 	});
 
 	app.get('/problem_window' ,isLoggedIn , function(req,res) {
