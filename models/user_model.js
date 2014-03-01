@@ -10,7 +10,7 @@ var crypto = require('crypto');
 var util = require('../lib/hash');
 
 var userSchema = {
-	set_name : "user:"
+	set_name : "user:",
 	name : "name",
 	password : "password",
 	ph_no : "ph_no",
