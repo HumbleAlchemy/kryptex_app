@@ -6,7 +6,7 @@
 */
 
 /*  keys for redis hashset */
-
+var crypto = require('crypto');
 var userSchema = {
 	name : "name",
 	password : "password",
@@ -91,12 +91,26 @@ exports.check_user = function(db, user_name, user_password, callback){
 					callback(null,0);
 				}else{
 					callback(null,2);
-				}
+				}	
 			}else{
 				callback(null,1);
 			}
 		}
 	});
 };
+
+
+function getHash(password) {
+	var sha2 = crypto.createHash('sha256');
+	var hash = sha2.update(password).digest('hex');
+	console.log("hash: " + hash );
+	return hash;
+} 
+
+function matchHash(password,hash) {
+	var sha2 = crypto.createHash('sha256');
+	var input_hash = sha2.update(password).digest('hex');
+	return input_hash == hash;
+}
 
 
