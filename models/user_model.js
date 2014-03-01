@@ -23,52 +23,74 @@ var scoreSchema = {
 };
 
 
-/* MOdule for adding user details */
-exports.adduser = function(db, user_email, user_password,user_name, user_ph_no,callback){
-	check_for_id(db, user_name,function (err, status){
-		if( !err) {
-			if( status == 0 ){
-				db.hmset("user:"+user_name,
-					userSchema.email, user_email, 
-					userSchema.password, util.get_hash(user_password),
-					userSchema.name, user_name,
-					userSchema.ph_no, user_ph_no,
-					userSchema.current_level, 0,
-					userSchema.wildcard_count, 2,
-					function (err, status){
+ // MOdule for adding user details  exports.adduser = function(db, user_email,
+user_password,user_name, user_ph_no,callback){     check_for_id(db,
+user_name,function (err, status){         if( !err) {             if( status
+== 0 ){                 db.hmset("user:"+user_name,
+userSchema.email, user_email,                      userSchema.password,
+util.get_hash(user_password),                     userSchema.name, user_name,
+userSchema.ph_no, user_ph_no,                     userSchema.current_level, 0,
+userSchema.wildcard_count, 2,                     function (err, status){
+if(err){                             console.log("ERR IN FETCHING DB AT
+adduser");                             callback(err,null);
+}else{                             db.zadd( scoreSchema.set_name, 0,
+user_name, function (err, status){                                 if(err){
+console.log("ERR IN FETCHING DB AT adduser");
+callback(err,null);                                 }else{
+callback(null,1);                                 }
+});                         }                 });             }else{
+console.log("hehe");             }         }     });      };
+
+
+/*exports.adduser = function(db, user_email, user_password,user_name, user_ph_no,callback){
+	var status = check_for_id(db,user_email);
+	if( status == 0 ){
+		db.hmset("user:"+user_name,
+			userSchema.email, user_email, 
+			userSchema.password, util.get_hash(user_password),
+			userSchema.name, user_name,
+			userSchema.ph_no, user_ph_no,
+			userSchema.current_level, 0,
+			userSchema.wildcard_count, 2,
+			function (err, status){
+				if(err){
+					console.log("ERR IN FETCHING DB AT adduser");
+					callback(err,null);
+				}else{
+					db.zadd( scoreSchema.set_name, 0, user_name, function (err, status){
 						if(err){
 							console.log("ERR IN FETCHING DB AT adduser");
 							callback(err,null);
 						}else{
-							db.zadd( scoreSchema.set_name, 0, user_name, function (err, status){
-								if(err){
-									console.log("ERR IN FETCHING DB AT adduser");
-									callback(err,null);
-								}else{
-									callback(null,1);
-								}
-							});
+							callback(null,1);
 						}
-				});
-			}else{
-
-			}
-		}
-	});		
-};
-
+					});
+				}
+		});
+	}
+	else{
+		console.log("status inside adduser: " + status);
+	}	
+}
+*/
 /* Module for checking existance of user */
-var  check_for_id = function (db, user_name,callback){
+function check_for_id(db, user_name){
 	db.exists("user:"+ user_name, function (err, status){
-		if(err) 
-			console.log("unable to fetch data at check_for_id");
-		else
+		if(!err){
+			console.log("status here: " + status);
 			callback(null,status);
+		} 
+		else {
+			console.log("unable to fetch data at check_for_id");
+			//callback(err,null);
+		}			
 	});
 };
 
-exports.check_for_id = check_for_id;
 /*change user score */
+
+exports.check_for_id = check_for_id;
+
 exports.increment_user_score = function(user_name,callback) {
 	db.zincrby(scoreSchema.set_name,1,user_name,function(err,status) {
 		if(!err) {
