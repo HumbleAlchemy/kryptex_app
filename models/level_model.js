@@ -1,8 +1,8 @@
 
 var LevelSchema = {
-	schema_name = "level",
-	image_path = 0,
-	solution = 1
+	schema_name : "level",
+	image_path : 0,
+	solution : 1
 }
 
 

@@ -85,8 +85,10 @@ exports.increment_user_score = function(user_name,callback) {
 
 exports.check_user = function(db, user_name, user_password, callback){
 	db.hmget("user:"+user_name, userSchema.name, userSchema.password,function (err, user_detail){
-		if(err) 
+		if(err) {
 			console.log("ERR AT FETCHING DATA AT check_user");
+		}
+			
 		else{
 			if( user_detail[0] == user_name ){
 				if(util.check_hash(user_password,user_detail[1]){

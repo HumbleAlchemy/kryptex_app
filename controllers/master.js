@@ -60,7 +60,14 @@ module.exports = function(app,db) {
 
 	/*    ADMIN ROUTES (POST,GET)     */
 
-	
+	app.get('/admin',function(req,res){
+			res.render("/admin");
+	});
+
+	app.post('/admin/signin',function(req,res){
+		User.check_user(db,	req.body.username,req.body.password,function(data)
+	});
+
 
 
 }
