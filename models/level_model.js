@@ -6,7 +6,7 @@ var LevelSchema = {
 }
 
 
-modeule.exports.add_level = function() {
+module.exports.add_level = function() {
 
 }
 

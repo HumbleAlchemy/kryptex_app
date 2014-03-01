@@ -132,6 +132,31 @@ exports.check_user = function(db, user_name, user_password, callback){
 	});
 };
 
+exports.use_wildcard = function(db,user_name,callback) {
+	db.hmget(userSchema.set_name + user_name,userSchema.wildcard_count,userSchema.current_level,function(err,counts){
+		if(!err) {
+			// counts[index] => 0 : wildcard_count and 1 : current_level
+			if(counts[0] > 0) {
+				db.hmset(userSchema.set_name + user_name, userSchema.wildcard_count, parseInt(counts[0]) - 1, userSchema.current_level,parseInt(counts[1]) + 1, function(err,status){
+					if(!err) {
+						console.log("user status: " + status);
+						callback(null,1);
+					} else {
+						callback(err,null);
+					}
+				});
+			} else {
+				// no wildcard to use
+				callback(null,0);
+			}	
+		} else {
+			console.log("ERR in user_model.use wildcard");
+			callback(err,null);
+		}
+		
+	});
+}
+
 
 
 
