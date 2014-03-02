@@ -8,30 +8,56 @@
     <body background="/img/dirty_old_shirt.png">
         <div class="container" >
             <form role="form" method="post" id="frm">
-                <div> WELCOME <%= user_name %></div>
-                <div class="row">
-                    <div class="col-lg-7">
-                        <img src='<%= image %>' id='problem' style="height:450px;" >
-                    </div>
-                    <div class="col-lg-5" style='background: rgba(54, 25, 25, 0.2);color:#fff'>
+                <h1 style='color:white'> WELCOME <%= user_name %> </h1>
+                </br>
+                </br>
 
+                <div class="row">
+                    <div class="col-lg-8">
+                        <img src='<%= image %>' id='problem' style="height:450px;width:100%;" >
+                    </div>
+                    <div class="col-lg-4" id='leaderboard' style='background:rgba(255, 255, 255, 0.2);color:#fff'>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-7">
-                        <input type='text' id='user_solution' placeholder='INSERT YOUR ANSWER HERE IN CAPITAL WITHOUT SPACES'>
+                    <div class="col-lg-8">
+                        <input type='text' id='user_solution' class='form-control' style='margin-top:10px;height:42px;width:100%;background:rgba(255, 255, 255, 0.2);'placeholder='INSERT YOUR ANSWER HERE IN CAPITAL WITHOUT SPACES'>
                     </div>
-                    <div class="col-lg-5">
+                    <div class="col-lg-4">
                         <div class="col-lg-6">
-                            <button class='btn btn-lg btn-default' id='submit_solution'> SUBMIT </button>
+                            <button class='btn btn-lg btn-success' id='submit_solution' style='height:42px;width:100%;margin-top:10px;' type='button' > SUBMIT </button>
                         </div>
                         <div class="col-lg-6">
-                            <button class='btn btn-lg btn-primary' id='use_wildcard'> Use Wildcard </button>
+                            <button class='btn btn-lg btn-inverse' id='use_wildcard' style='margin-top:10px;height:42px;width:100%;' type='button' > Use Wildcard </button>
                         </div>
                     </div>
                 </div>
             </form>
         </div>
     </body>
+    <script>
+        var socket = io.connect();
+
+        /*     emit part */
+
+        $('#submit_solution').click( function() {
+            var answer = $('#user_solution').val();    
+            if( !answer ){
+                alert('PLEASE PROVIDE ANSWER FIRST');
+            }else{
+                socket.emit('check_answer', '<%= user_name %>','<%= digest %>' );
+            }
+        });
+
+        $('#use_wildcard').click( function() {
+            socket.emit('check_answer', '<%= user_name %>','<%= digest %>' );
+        });        
+
+        /*   handle part */
+
+        socket.on('wrong_solution', function (){
+            $('#user_solution').val('');
+        });
+    </script>
     
 </html>
