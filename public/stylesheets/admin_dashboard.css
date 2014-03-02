@@ -1,0 +1,15 @@
+.divider {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	border: 1px solid #f1f1f1;
+	height: 0px;
+}
+
+.addlevel {
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
+.setTime > div {
+	margin-bottom: 10px;
+}

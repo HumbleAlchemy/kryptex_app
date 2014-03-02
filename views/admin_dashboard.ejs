@@ -1,8 +1,115 @@
 <html>
 <head>
 	<title></title>
+	<link rel= 'stylesheet' href='../bootstrap/css/bootstrap.min.css'  type='text/css'/>
+	<link rel= 'stylesheet' href='../stylesheets/admin_dashboard.css'  type='text/css'/>
+	<script src="../js/all.js"></script>
 </head>
 <body>
-	<h1>Dashboard</h1>	
+	<div class="nav navbar navbar-default">
+		<div class="container">
+			<div class="navbar-header">
+				<div class="navbar-brand">Dashboard</div>
+			</div>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="">Sign out</a></li>
+			</ul>
+		</div>
+	</div><!-- navbar ends here -->
+
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-6">
+				<div class="row">
+					<div class="col-lg-4"><h4>Start Quiz</h3></div>
+					<div class="col-lg-8">
+						<button class="btn btn-default btn-primary" type="button" id="start_quiz" >
+							Go!
+						</button>
+					</div>
+				</div>
+				<div class="divider"></div>
+				<div class="row addlevel">
+					<!-- <form role="form" method="post" action="/admin/dashboard/addlevel"  enctype="multipart/form-data"> -->
+					<form role="form" action="#"  enctype="multipart/form-data">
+					  <div class="form-group">
+					    <h4>Add Level</h4>
+					    
+					  </div>
+					  
+					  <div class="form-group">
+					    <label for="exampleInputFile">Image File</label>
+					    <input type="file" id="exampleInputFile" name="levelImage">
+					    
+					  </div>
+					  
+					  <button type="submit" class="btn btn-default">Submit</button>
+					</form>
+				</div>
+				<div class="divider"></div>
+				<div class="row">
+					
+						<!-- <h4>Set Time</h3>
+					
+					<input type="text" class="form-control" name="startDateTime" placeholder="enter date time with">
+					<button class="btn btn-default btn-primary" type="button" id="start_quiz" >
+							Set
+						</button> -->
+
+					<h4>Set Time</h4>
+
+					<div class="row setTime">
+						<div class="col-lg-3">
+							<p>Day</p>
+						</div>
+						<div class="col-lg-9"><input type="text" class="form-control"></div>
+						<div class="col-lg-3">
+							<p>Month</p>
+						</div>
+						<div class="col-lg-9"><input type="text" class="form-control"></div>
+						<div class="col-lg-3">
+							<p>Year</p>
+						</div>
+						<div class="col-lg-9"><input type="text" class="form-control"></div>
+						<div class="col-lg-3">
+							<p>Hour</p>
+						</div>
+						<div class="col-lg-9"><input type="text" class="form-control"></div>
+					</div>
+					<div class="row">
+						<div class="col-lg-3">
+							
+						</div>
+						<dvi class="col-lg-9">
+							<button class="btn btn-default btn-primary" type="button" id="start_quiz" >
+							Set
+						</button>
+						</dvi>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-6">
+				<div class="row">
+					<h2>LeaderBoard</h2>
+				</div>
+				<div class="row">
+					<ul class="leader-list list-group">
+						<li class="list-group-item">
+							<span class="badge">14</span>
+    						Alchemist
+    					</li>
+						<li class="list-group-item">
+							<span class="badge">13</span>
+    						Master
+						</li>
+						<li class="list-group-item">
+							<span class="badge">4</span>
+    						Heat
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

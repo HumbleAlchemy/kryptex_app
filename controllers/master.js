@@ -13,6 +13,7 @@ module.exports = function(app,db) {
 		res.render('first');
 	});
 
+	//app.get('')
 	app.get('/login', function  ( req, res) {
 		if (!req.param('title')){
 			res.render('login', { title : 'login', user_name : ""});
@@ -94,7 +95,11 @@ module.exports = function(app,db) {
 	/*    ADMIN ROUTES (POST,GET)     */
 
 	app.get('/admin',function(req,res){
-			res.render("/admin");
+			res.render("admin");
+	});
+
+	app.get('/admin/dashboard',function(req,res) {
+		res.render('admin_dashboard');
 	});
 
 	app.post('/admin/signin',function(req,res){
@@ -107,9 +112,27 @@ module.exports = function(app,db) {
 		});
 	});
 
-	app.get('/admin/dashboard',function(req,res) {
-		res.render('admin_dashboard');
+	app.post('/admin/dashboard/addlevel',function(req,res){
+		console.log(req.param('levelImage'));
+
+		var fs = require('fs');
+		 // get the temporary location of the file
+	    var tmp_path = req.files.levelImage.path;
+	    // set where the file should actually exists - in this case it is in the "images" directory
+	    var target_path = '../files/levels/' + req.files.levelImage.name;
+	    // move the file from the temporary location to the intended location
+	    fs.rename(tmp_path, target_path, function(err) {
+	        if (err) throw err;
+	        // delete the temporary file, so that the explicitly set temporary upload dir does not get filled with unwanted files
+	        fs.unlink(tmp_path, function() {
+	            if (err) throw err;
+	            res.send('File uploaded to: ' + target_path + ' - ' + req.files.levelImage.size + ' bytes');
+	        });
+	    });
+		//res.send(req.files);
 	});
+
+	
 
 
 
@@ -124,4 +147,8 @@ function isLoggedIn(req, res, next) {
 
 	// if they aren't redirect them to the home page
 	res.redirect('/');
+}
+
+function isRestricted(req,res,next) {
+	res.send("404 BitchAss!");
 }

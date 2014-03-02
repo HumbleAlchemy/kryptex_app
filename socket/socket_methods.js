@@ -104,6 +104,10 @@ module.exports = function (io, db) {
 			
 		});
 
+		/*================ from admin panel ===============*/
+		socket.on('set_time',function(start_time_ms){
+			
+		});
 
 	});
 }
