@@ -17,6 +17,10 @@
                         <img src='<%= image %>' id='problem' style="height:450px;width:100%;" >
                     </div>
                     <div class="col-lg-4" id='leaderboard' style='background:rgba(255, 255, 255, 0.2);color:#fff'>
+                        <% for( var i=0; i< top_users.length ; i++ ) {%>
+                            <%= i+1 %> <%= top_users[i].slice(5) %>.
+                            </br>
+                        <% } %>
                     </div>
                 </div>
                 <div class="row">
@@ -51,13 +55,22 @@
 
         $('#use_wildcard').click( function() {
             socket.emit('check_answer', '<%= user_name %>','<%= digest %>' );
-        });        
+        });
 
         /*   handle part */
 
         socket.on('wrong_solution', function (){
             $('#user_solution').val('');
         });
+
+        socket.on('update_leaderboard', function ( topers){
+            // update leader board
+            for()
+            $('#leaderboard').append();
+
+
+        });
+
     </script>
     
 </html>
