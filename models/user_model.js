@@ -20,8 +20,11 @@ var userSchema = {
 };
 
 var scoreSchema = {
-	set_name : "scores"
+	set_name : "scores",
+	lower_limit : 0,
+	upper_limit : 4
 };
+
 
 
  // MOdule for adding user details  
@@ -169,6 +172,14 @@ exports.get_wildcard_count = function(db,user_name,callback) {
 	});
 }
 
+/*    getting top five users */
 
-
-
+module.exports.get_top_users = function (db, callback){
+	db.zrevrange( scoreSchema.set_name, scoreSchema.lower_limit, scoreSchema.upper_limit, function (err, top_users){
+		if( !err){
+			callback( null, top_users);
+		}else{
+			callback(1, null);
+		}
+	});
+}
