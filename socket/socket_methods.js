@@ -30,53 +30,24 @@ module.exports = function (io, db) {
 			if( user_digest == digest ){
 				User.use_wildcard(db,user_name,function(err,wildcard_count,new_level){
 					if(!err) {
-						Level.get_level_image(db,new_level,function(err,image_url) {
+						Level.get_level_image(db,new_level,function (err, image_url) {
 							if(!err) {
 								socket.emit('next_level', question_url, status);
-								
+								User.get_top_users( db, function (err, top_users){
+									if( !err ){
+										socket.broadcast.emit('update_leaderboard', top_users);
+									}else{
+										console.log('err at check_answer inside update_leaderboard');
+									}
+								});
 							} else {
 								console.log(err);
 							}
-						}	
+						});	
 					} else {
 						console.log(err);
 					}
 				});
-				/*User.get_current_level_and_wildcard_count( db, user_name, function ( err, user_level_info){
-					if( !err ){
-						var current_level = user_level_info[0];
-						db.lindex( levelSchema.name + current_level , levelSchema.solution_index, function (err, solution){
-							if(!err){
-								if( solution == user_answer ){
-									User.increment_user_score( user_name, function (err, status){
-										if(!err){
-											db.lindex( levelSchema.name, levelSchema.question_index, function (err, question_url){
-												if(!err){
-													socket.emit('next_level', question_url, status);
-													db.zrevrange( scoreSchema.set_name, 0, 4, function (err, top_five){
-														if( !err ){
-															socket.broadcast.emit( 'update_leaderboard', top_five);		
-														}else{
-															console.log( "UNABLE TO FETCH FROM DB AT check_answer INSIDE socket_methods.js");
-														}
-													});		
-												}else{
-													console.log('UNABLE TO FETCH FROM DB AT use_wildcard INSIDE socket_methods.js');
-												}
-											});
-										}else{
-											console.log('UNABLE TO FETCH FROM DB AT check_answer INSIDE socket_methods.js');
-										}
-									});
-								}else{
-									socket.emit("wrong_solution");
-								}
-							}else{
-								console.log('UNABLE TO FETCH FROM DB AT check_answer INSIDE socket_methods.js');
-							}
-						});
-					}
-				});*/
 			}else{
 				console.log('AUTH ERROR FOR USER '+ user_name);
 				socket.emit('auth_error');
@@ -128,6 +99,7 @@ module.exports = function (io, db) {
 		});
 
 		/*================ from admin panel ===============*/
+
 		socket.on('set_time',function(start_time_ms){
 			
 		});

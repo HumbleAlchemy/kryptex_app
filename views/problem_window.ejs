@@ -18,7 +18,7 @@
                     </div>
                     <div class="col-lg-4" id='leaderboard' style='background:rgba(255, 255, 255, 0.2);color:#fff'>
                         <% for( var i=0; i< top_users.length ; i++ ) {%>
-                            <%= i+1 %> <%= top_users[i].slice(5) %>.
+                            <%= i+1 %>. <%= top_users[i].slice(5) %>
                             </br>
                         <% } %>
                     </div>
@@ -65,7 +65,7 @@
 
         socket.on('update_leaderboard', function ( topers){
             // update leader board
-            for()
+
             $('#leaderboard').append();
 
 
