@@ -28,7 +28,21 @@ module.exports = function (io, db) {
 		socket.on('check_answer', function ( user_name, digest, user_answer){
 			var user_digest = Util.get_hash( user_name );
 			if( user_digest == digest ){
-				User.get_current_level_and_wildcard_count( db, user_name, function ( err, user_level_info){
+				User.use_wildcard(db,user_name,function(err,wildcard_count,new_level){
+					if(!err) {
+						Level.get_level_image(db,new_level,function(err,image_url) {
+							if(!err) {
+								socket.emit('next_level', question_url, status);
+								
+							} else {
+								console.log(err);
+							}
+						}	
+					} else {
+						console.log(err);
+					}
+				});
+				/*User.get_current_level_and_wildcard_count( db, user_name, function ( err, user_level_info){
 					if( !err ){
 						var current_level = user_level_info[0];
 						db.lindex( levelSchema.name + current_level , levelSchema.solution_index, function (err, solution){
@@ -62,7 +76,7 @@ module.exports = function (io, db) {
 							}
 						});
 					}
-				});
+				});*/
 			}else{
 				console.log('AUTH ERROR FOR USER '+ user_name);
 				socket.emit('auth_error');

@@ -92,10 +92,9 @@ exports.check_for_id = function(db, user_name,callback){
 
 
 exports.increment_user_score = function(user_name,callback) {
-	db.zincrby(scoreSchema.set_name,1,user_name,function(err,status) {
+	db.zincrby(scoreSchema.set_name,1,"user:" + user_name,function(err,status) {
 		if(!err) {
 			callback(null,1);
-		} else {
 			db.hset( userSchema.set_name + user_name,userSchema.current_level,status,function(err,status){
 				if(!err) {
 					callback(null,status);
@@ -103,6 +102,7 @@ exports.increment_user_score = function(user_name,callback) {
 					callback(err,null);
 				}
 			});
+		} else {
 			callback(err,null);
 		}
 	});
@@ -136,25 +136,37 @@ exports.use_wildcard = function(db,user_name,callback) {
 	db.hmget(userSchema.set_name + user_name,userSchema.wildcard_count,userSchema.current_level,function(err,counts){
 		if(!err) {
 			// counts[index] => 0 : wildcard_count and 1 : current_level
+			var new_wildcard_count = parseInt(counts[0]) - 1; 
+			var new_current_level = parseInt(counts[1]) + 1; 
 			if(counts[0] > 0) {
-				db.hmset(userSchema.set_name + user_name, userSchema.wildcard_count, parseInt(counts[0]) - 1, userSchema.current_level,parseInt(counts[1]) + 1, function(err,status){
+
+				db.hmset(userSchema.set_name + user_name, userSchema.wildcard_count, new_wildcard_count, userSchema.current_level, new_current_level, function(err,status){
 					if(!err) {
 						console.log("user status: " + status);
-						callback(null,1);
+						db.zincrby(scoreSchema.set_name,1,"user:" + user_name,function(err,status){
+							if(!err) {
+								console.log("use_wildcard > zincrby: " + new_wildcard_count);
+								callback(null,new_wildcard_count,new_current_level);
+							} else {
+								console.log("err in use_wildcard > zincrby");		
+								callback(err,null,null);
+							}	 
+						}); //zincrby
+					
 					} else {
-						callback(err,null);
+						callback(err,null,null);
 					}
-				});
+				}); // hmset
 			} else {
 				// no wildcard to use
-				callback(null,0);
+				callback(null,0,null);
 			}	
 		} else {
 			console.log("ERR in user_model.use wildcard");
-			callback(err,null);
+			callback(err,null,null);
 		}
 		
-	});
+	}); //hmget
 }
 
 // gets the number of wildcards left with user
