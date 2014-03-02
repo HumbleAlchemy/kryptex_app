@@ -99,7 +99,6 @@ module.exports = function (io, db) {
 				socket.emit('auth_error');
 			}
 		});
-
 		/* for checking existance of user name*/
 
 		socket.on('check_for_user_name',function (user_name){
