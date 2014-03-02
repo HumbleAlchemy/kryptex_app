@@ -149,7 +149,7 @@ exports.use_wildcard = function(db,user_name,callback) {
 						db.zincrby(scoreSchema.set_name,1,"user:" + user_name,function(err,status){
 							if(!err) {
 								console.log("use_wildcard > zincrby: " + new_wildcard_count);
-								callback(null,new_wildcard_count,new_current_level);
+								callback(null, new_wildcard_count,new_current_level);
 							} else {
 								console.log("err in use_wildcard > zincrby");		
 								callback(err,null,null);

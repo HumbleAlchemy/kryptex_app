@@ -30,14 +30,21 @@ module.exports = function (io, db) {
 			if( user_digest == digest ){
 				User.use_wildcard(db,user_name,function(err,wildcard_count,new_level){
 					if(!err) {
-						Level.get_level_image(db,new_level,function(err,image_url) {
+						Level.get_level_image(db,new_level,function (err, image_url) {
 							if(!err) {
 								socket.emit('next_level', question_url, status);
 
+								User.get_top_users( db, function (err, top_users){
+									if( !err ){
+										socket.broadcast.emit('update_leaderboard', top_users);
+									}else{
+										console.log('err at check_answer inside update_leaderboard');
+									}
+								});
 							} else {
 								console.log(err);
 							}
-						}	
+						});	
 					} else {
 						console.log(err);
 					}
@@ -93,6 +100,7 @@ module.exports = function (io, db) {
 		});
 
 		/*================ from admin panel ===============*/
+
 		socket.on('set_time',function(start_time_ms){
 			
 		});
