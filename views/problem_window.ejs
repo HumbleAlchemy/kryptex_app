@@ -49,7 +49,9 @@
             }
         });
 
-
+        $('#use_wildcard').click( function() {
+            socket.emit('check_answer', '<%= user_name %>','<%= digest %>' );
+        });        
 
         /*   handle part */
 
