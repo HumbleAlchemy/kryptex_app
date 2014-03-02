@@ -35,13 +35,21 @@ module.exports = function(app,db) {
 						console.log("can't get image in problem_window for " +  user_name);
 						res.redirect('/');
 					}else{
-						res.render('problem_window', { 
-							user_name : user_name,
-							digest : digest, 
-							current_level : current_level_wildcard_count[0],
-						 	wildcard_count : current_level_wildcard_count[1],
-						 	image :  problem_image
+						User.get_top_users(db, function ( err, top_users){
+							if( !err ){
+								res.render('problem_window', { 
+									user_name : user_name,
+									digest : digest, 
+									current_level : current_level_wildcard_count[0],
+								 	wildcard_count : current_level_wildcard_count[1],
+								 	image :  problem_image,
+								 	top_users : top_users
+								});
+							}else{
+								console.log('ERR AT /problem window inside get_top_users ');
+							}
 						});
+						
 					}	
 				});
 			}else{
