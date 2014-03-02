@@ -34,7 +34,8 @@ module.exports = function(app,db) {
 						console.log("can't get image in problem_window for " +  user_name);
 						res.redirect('/');
 					}else{
-						res.render('problem_window', { user_name : user_name,
+						res.render('problem_window', { 
+							user_name : user_name,
 							digest : digest, 
 							current_level : current_level_wildcard_count[0],
 						 	wildcard_count : current_level_wildcard_count[1],
