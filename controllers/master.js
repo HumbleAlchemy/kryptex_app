@@ -30,7 +30,7 @@ module.exports = function(app,db) {
 		var digest = util.get_hash( user_name);
 		User.get_current_level_and_wildcard_count( db, user_name, function ( err, current_level_wildcard_count){
 			if( !err ){
-				Level.get_level_image( current_level_wildcard_count[0], db, function (problem_image){
+				Level.get_level_image( db, current_level_wildcard_count[0], function (err, problem_image){
 					if( !problem_image ){
 						console.log("can't get image in problem_window for " +  user_name);
 						res.redirect('/');

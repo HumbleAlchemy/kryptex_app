@@ -49,7 +49,7 @@
             if( !answer ){
                 alert('PLEASE PROVIDE ANSWER FIRST');
             }else{
-                socket.emit('check_answer', '<%= user_name %>','<%= digest %>' );
+                socket.emit('check_answer', '<%= user_name %>','<%= digest %>', answer );
             }
         });
 
@@ -69,6 +69,12 @@
             $('#leaderboard').append();
 
 
+        });
+
+
+        socket.on('next_level', function ( question_url, status){
+            alert(question_url);
+            $('#problem').attr('src', question_url);            
         });
 
     </script>
