@@ -10,6 +10,21 @@
         var seconds_left;
         /* timer metod */
 
+        function startTime(){
+            var target_date =  parseInt(<%= timer %>)/1000;
+            var hours, minutes, seconds;
+            setInterval(function () {
+                seconds_left = (target_date) / 1000;
+                days = parseInt(seconds_left / 86400);
+                seconds_left = seconds_left % 86400;
+                hours = parseInt(seconds_left / 3600);
+                seconds_left = seconds_left % 3600;
+                minutes = parseInt(seconds_left / 60);
+                seconds = parseInt(seconds_left % 60);
+                if( seconds_left <= 0){
+                }
+            }, 1000);
+        }
     </script>
     <body background="/img/dirty_old_shirt.png">
         <form id='frm' action='/show_leaderboard' method='post'></form>
@@ -53,6 +68,7 @@
     </body>
     <script>
         var socket = io.connect();
+        startTime();
         /*     emit part */
 
         $('#submit_solution').click( function() {
