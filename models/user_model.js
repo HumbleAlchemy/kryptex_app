@@ -197,3 +197,14 @@ module.exports.get_top_users = function (db, callback){
 		}
 	});
 }
+
+module.exports.get_full_rank_list = function(db,callback) {
+	db.zrevrangebyscore('scores','+inf','0','withscores',function(err,list){
+		if(!err) {
+			console.log('get rank list');
+			callback(null,list);
+		} else {
+			callback(err,null);
+		}
+	});
+}

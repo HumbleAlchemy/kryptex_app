@@ -1,6 +1,7 @@
 var User = require('../models/user_model');
 var Util = require('../lib/hash');
 var Level = require('../models/level_model');
+var Time = require('../models/time_model');
 
 var userSchema = {
 	name : "name",
@@ -112,8 +113,15 @@ module.exports = function (io, db) {
 
 		/*================ from admin panel ===============*/
 
-		socket.on('set_time',function(start_time_ms){
-			
+		socket.on('set_time',function(){
+			start_time_ms = (new Date()).getTime().toString();
+			Time.set_time(db,start_time_ms,function(){
+				if(!err) {
+
+				} else {
+					
+				}
+			});
 		});
 
 
