@@ -6,13 +6,39 @@
         <script type="text/javascript" src="js/countdown.js"></script>
         <script src="/socket.io/socket.io.js"></script>
     </head>
+    <script type="text/javascript">
+        var seconds_left;
+        /* timer metod */
+
+        function startTime(){
+            var target_date =  parseInt(<%= timer %>);
+            var hours, minutes, seconds;
+            setInterval(function () {
+                seconds_left = (target_date) / 1000;
+                days = parseInt(seconds_left / 86400);
+                seconds_left = seconds_left % 86400;
+                hours = parseInt(seconds_left / 3600);
+                seconds_left = seconds_left % 3600;
+                minutes = parseInt(seconds_left / 60);
+                seconds = parseInt(seconds_left % 60);
+                if( seconds_left <= 0){
+                }
+            }, 1000);
+        }
+    </script>
     <body background="/img/dirty_old_shirt.png">
         <div class="container" >
             <form role="form" method="post" id="frm">
                 <h1 style='color:white'> WELCOME <%= user_name %> </h1>
-                </br>
-                </br>
+                <div style="float:left">
+                <script type="application/javascript">
+                    alert( <%= timer %>);
+                    var myCountdown2 = new Countdown({style:"flip",time: 259200000, width:100, height:40, rangeHi:"day"});
 
+                </script>
+            </div>
+                </br>
+                </br>
                 <div class="row">
                     <div class="col-lg-8">
                         <img src='<%= image %>' id='problem' style="height:450px;width:100%;" >
@@ -42,25 +68,7 @@
     </body>
     <script>
         var socket = io.connect();
-        
-        /* timer metod */
-
-        function startTime(){
-            var target_date =  parseInt(<%= timer %>);
-            var hours, minutes, seconds;
-            setInterval(function () {
-                seconds_left = (target_date) / 1000;
-                days = parseInt(seconds_left / 86400);
-                seconds_left = seconds_left % 86400;
-                hours = parseInt(seconds_left / 3600);
-                seconds_left = seconds_left % 3600;
-                minutes = parseInt(seconds_left / 60);
-                seconds = parseInt(seconds_left % 60);
-                if( seconds_left <= 0){
-                }
-            }, 1000);
-        }
-
+        startTime();
         /*     emit part */
 
         $('#submit_solution').click( function() {

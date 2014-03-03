@@ -40,6 +40,7 @@ module.exports = function(app,db) {
 							if( !err ){
 								Time.get_time(db, function (err, end_time){
 									if( !err ){
+										console.log( end_time);
 										res.render('problem_window', {
 											user_name : user_name,
 											digest : digest, 
@@ -47,7 +48,7 @@ module.exports = function(app,db) {
 										 	wildcard_count : current_level_wildcard_count[1],
 										 	image :  problem_image,
 										 	top_users : top_users,
-										 	timer :  parseInt(end_time) - new Date().getTime() 
+										 	timer :  parseInt(end_time) - ((new Date()).getTime()) 
 										});
 									}
 								});
@@ -168,5 +169,5 @@ function isLoggedIn(req, res, next) {
 }
 
 function isRestricted(req,res,next) {
-	res.send("404 BitchAss!");
+	res.send("Your Quiz is Over!");
 }

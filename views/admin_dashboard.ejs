@@ -111,5 +111,10 @@
 			</div>
 		</div>
 	</div>
+	<script type="text/javascript">
+		var socket = io.connect();
+		socket.emit('end_all_sockets');
+	</script>
 </body>
+
 </html>
