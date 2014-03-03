@@ -108,6 +108,12 @@
             $('#user_solution').val('');
         });
 
+
+        socket.on('next_level', function ( question_url, status){
+            alert(question_url);
+            $('#problem').attr('src', question_url);            
+        });
+
     </script>
     
 </html>

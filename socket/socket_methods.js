@@ -1,6 +1,10 @@
 var User = require('../models/user_model');
 var Util = require('../lib/hash');
 var Level = require('../models/level_model');
+<<<<<<< HEAD
+=======
+var Time = require('../models/time_model');
+>>>>>>> 9f4483922c63cb01724c77de0a7f3ce9531dbd4f
 
 var userSchema = {
 	name : "name",
@@ -99,7 +103,6 @@ module.exports = function (io, db) {
 				socket.emit('auth_error');
 			}
 		});
-
 		/* for checking existance of user name*/
 
 		socket.on('check_for_user_name',function (user_name){
@@ -113,7 +116,16 @@ module.exports = function (io, db) {
 
 		/*================ from admin panel ===============*/
 
-		socket.on('set_time',function(start_time_ms){
+		socket.on('set_time',function(){
+			start_time_ms = (new Date()).getTime().toString();
+			Time.set_time(db,start_time_ms,function(){
+				if(!err) {
+
+				} else {
+					
+				}
+			});
+
 		});
 
 		/* end all live socket */

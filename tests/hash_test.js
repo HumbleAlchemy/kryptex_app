@@ -1,17 +1,3 @@
-/*var crypto = require('crypto');
-module.exports.get_hash = function(password) {
-	var sha2 = crypto.createHash('sha256');
-	var hash = sha2.update(password).digest('hex');
-	console.log("hash: " + hash );
-	return hash;
-} 
-
-module.exports.match_hash = function(password,hash) {
-	var sha2 = crypto.createHash('sha256');
-	var input_hash = sha2.update(password).digest('hex');
-	return input_hash == hash;
-}*/
-
 var crypto = require('crypto');
 
 var default_workfactor = 10000;
@@ -51,3 +37,7 @@ function gen_salt() {
 	var salt = md5.update(Math.random().toString(36).slice(2)).digest('hex');
 	return salt;
 }
+
+var hash = get_hash('password');
+console.log(hash);
+console.log(match_hash('password',hash))

@@ -69,6 +69,11 @@ module.exports = function(app,db) {
 		res.render('rules',{ user_name : req.session.userId, message : "You have been successfully registered" });
 	});
 	
+	app.get('/rank_list',function(req,res){
+		User.get_full_rank_list(db,function(err,rank_list){
+			res.render('rank_list',{ list : rank_list });
+		});
+	});
 
 
 	/*==============================================================================================================*/
@@ -122,13 +127,19 @@ module.exports = function(app,db) {
 	});
 
 	app.post('/admin/signin',function(req,res){
-		User.check_user(db,	req.body.username,req.body.password,function(err,data) {
+		User.check_user(db,	req.param('username'),req.param('password'),function(err,data) {
 			if(!err) {
+				console.log(" : " + req.param('username') + " : " + req.param('password') + " : " + data);
 				res.redirect('/admin/dashboard');
 			} else {
 				consol.log("ERR in msater.js /admin/signin");
 			}
 		});
+			//check if admin exits
+			// -- if not redirect to signup
+			// -- if yes
+			// 		-- check and redirect to dashboard
+			//res.redirect('/admin/dashboard');
 	});
 
 	app.post('/admin/dashboard/addlevel',function(req,res){
