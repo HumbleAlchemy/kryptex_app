@@ -144,11 +144,10 @@ exports.use_wildcard = function(db,user_name,callback) {
 			var new_wildcard_count = parseInt(counts[0]) - 1; 
 			var new_current_level = parseInt(counts[1]) + 1; 
 			if(counts[0] > 0) {
-
-				db.hmset(userSchema.set_name + user_name, userSchema.wildcard_count, new_wildcard_count, userSchema.current_level, new_current_level, function(err,status){
+				db.hmset(userSchema.set_name + user_name, userSchema.wildcard_count, new_wildcard_count, userSchema.current_level, new_current_level, function (err,status){
 					if(!err) {
 						console.log("user status: " + status);
-						db.zincrby(scoreSchema.set_name,1,"user:" + user_name,function(err,status){
+						db.zincrby(scoreSchema.set_name,1,"user:" + user_name,function (err,status){
 							if(!err) {
 								console.log("use_wildcard > zincrby: " + new_wildcard_count);
 								callback(null, new_wildcard_count,new_current_level);

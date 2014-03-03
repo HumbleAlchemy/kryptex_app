@@ -1,10 +1,7 @@
 var User = require('../models/user_model');
 var Util = require('../lib/hash');
 var Level = require('../models/level_model');
-<<<<<<< HEAD
-=======
 var Time = require('../models/time_model');
->>>>>>> 9f4483922c63cb01724c77de0a7f3ce9531dbd4f
 
 var userSchema = {
 	name : "name",
@@ -31,8 +28,8 @@ module.exports = function (io, db) {
 		/* for checking user solution */
 		
 		socket.on('check_answer', function ( user_name, digest, user_answer){
-			var user_digest = Util.get_hash( user_name );
-			if( user_digest == digest ) {
+			//var user_digest = Util.get_hash( user_name );
+			if( Util.match_hash(user_name,digest) ) {
 				User.get_current_level_and_wildcard_count( db, user_name,function (err,data){
 					var current_level = data[0];
 					console.log( " user_answer : " + user_answer + " >>>>>>> " + current_level );
@@ -74,26 +71,30 @@ module.exports = function (io, db) {
 		
 		/* for updating wildcard information */
 
-		socket.on('use_wildcard',function ( current_level,digest, user_name){
-			var user_digest = Util.get_hash( user_name );
-			if( user_digest == digest ){
-				User.use_wildcard(db,user_name,function(err,wildcard_count,new_level){
+		socket.on('use_wildcard',function (  user_name, digest){
+			if( Util.match_hash(user_name,digest) ){
+				User.use_wildcard(db,user_name,function (err, wildcard_count, new_level){
 					if(!err) {
-						console.log( "teah " + new_level);
-						Level.get_level_image(db,new_level,function (err, image_url) {
-							if(!err) {
-								socket.emit('next_level', image_url, status);
-								User.get_top_users( db, function (err, top_users){
-									if( !err ){
-										socket.broadcast.emit('update_leaderboard', top_users);
-									}else{
-										console.log('err at check_answer inside update_leaderboard');
-									}
-								});
-							} else {
-								console.log(err);
-							}
-						});	
+						if( wildcard_count > 0){
+							console.log( "teah " + new_level);
+							Level.get_level_image(db,new_level,function (err, image_url) {
+								if(!err) {
+									socket.emit('next_level', image_url);
+									User.get_top_users( db, function (err, top_users){
+										if( !err ){
+											io.sockets.emit('update_leaderboard', top_users);
+										}else{
+											console.log('err at check_answer inside update_leaderboard');
+										}
+									});
+								} else {
+									console.log(err);
+								}
+							});
+						} else{
+							socket.emit('no_wildcard_remain');
+						}
+						
 					} else {
 						console.log(err);
 					}
@@ -132,6 +133,10 @@ module.exports = function (io, db) {
 
 		socket.on('end_all_sockets', function (){
 			
+			io.server.close(); // to stop receiving new connections
+
+			socket.broadcast.emit('close_connection');
+
 		});
 
 	});

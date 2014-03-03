@@ -81,13 +81,17 @@
         });
 
         $('#use_wildcard').click( function() {
-            socket.emit('check_answer', '<%= user_name %>','<%= digest %>' );
+            socket.emit('use_wildcard', '<%= user_name %>','<%= digest %>' );
         });
 
         /*   handle part */
 
         socket.on('wrong_solution', function (){
             $('#user_solution').val('');
+        });
+
+        socket.on('no_wildcard_remain', function (){
+            alert(' NO WILDCARD LEFT FOR YOU ');
         });
 
         socket.on('update_leaderboard', function ( topers){
@@ -103,7 +107,7 @@
         });
 
 
-        socket.on('next_level', function ( question_url, status){
+        socket.on('next_level', function ( question_url){
             $('#problem').attr('src', question_url);
             $('#user_solution').val('');
         });
@@ -112,6 +116,10 @@
         socket.on('next_level', function ( question_url, status){
             alert(question_url);
             $('#problem').attr('src', question_url);            
+        });
+
+        socket.emit('close_connection', function (){
+            socket.emit('disconnet');
         });
 
     </script>
