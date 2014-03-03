@@ -22,3 +22,15 @@ exports.set_time = function(db,start_time_ms,days,callback) {
 		}
 	});
 }
+
+
+exports.get_time = function(db, callback){
+	db.get(timeSchema.end_time, function (err, end_time){
+		if( !err ){
+			callback (null, end_time);
+		}else{
+			console.log('ERR AT get_time inside time_model');
+			callback( 1, null);
+		}
+	});
+}

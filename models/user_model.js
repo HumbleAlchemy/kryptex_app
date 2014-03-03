@@ -9,6 +9,7 @@
 var crypto = require('crypto');
 var util = require('../lib/hash');
 
+
 var userSchema = {
 	set_name : "user:",
 	name : "name",
@@ -22,7 +23,7 @@ var userSchema = {
 var scoreSchema = {
 	set_name : "scores",
 	lower_limit : 0,
-	upper_limit : 4
+	upper_limit : 9
 };
 
 
@@ -94,10 +95,11 @@ exports.check_for_id = function(db, user_name,callback){
 
 
 
-exports.increment_user_score = function(user_name,callback) {
+exports.increment_user_score = function(db,user_name,callback) {
 	db.zincrby(scoreSchema.set_name,1,"user:" + user_name,function(err,status) {
 		if(!err) {
 			callback(null,1);
+			console.log("from icnrement_user_score" + status);
 			db.hset( userSchema.set_name + user_name,userSchema.current_level,status,function(err,status){
 				if(!err) {
 					callback(null,status);

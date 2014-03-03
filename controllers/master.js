@@ -5,6 +5,7 @@
 var User = require('../models/user_model');
 var Level = require('../models/level_model');
 var util = require('../lib/hash');
+var Time = require('../models/time_model');
 module.exports = function(app,db) {
 
 	/*     GET ROUTES      */
@@ -30,20 +31,25 @@ module.exports = function(app,db) {
 		var digest = util.get_hash( user_name);
 		User.get_current_level_and_wildcard_count( db, user_name, function ( err, current_level_wildcard_count){
 			if( !err ){
-				Level.get_level_image( current_level_wildcard_count[0], db, function (problem_image){
+				Level.get_level_image( db, current_level_wildcard_count[0], function (err, problem_image){
 					if( !problem_image ){
 						console.log("can't get image in problem_window for " +  user_name);
 						res.redirect('/');
 					}else{
 						User.get_top_users(db, function ( err, top_users){
 							if( !err ){
-								res.render('problem_window', { 
-									user_name : user_name,
-									digest : digest, 
-									current_level : current_level_wildcard_count[0],
-								 	wildcard_count : current_level_wildcard_count[1],
-								 	image :  problem_image,
-								 	top_users : top_users
+								Time.get_time(db, function (err, end_time){
+									if( !err ){
+										res.render('problem_window', {
+											user_name : user_name,
+											digest : digest, 
+											current_level : current_level_wildcard_count[0],
+										 	wildcard_count : current_level_wildcard_count[1],
+										 	image :  problem_image,
+										 	top_users : top_users,
+										 	timer :  parseInt(end_time) - new Date().getTime() 
+										});
+									}
 								});
 							}else{
 								console.log('ERR AT /problem window inside get_top_users ');
@@ -91,6 +97,9 @@ module.exports = function(app,db) {
 		console.log("");
 		User.adduser(db, req.param('user_email'),req.param("user_password"),req.param("user_name"),req.param("user_ph_no"),function (err, status){
 			if(!err){
+				req.session.isLoggedIn = true;
+				req.session.userId = req.param('user_name');
+				console.log('user ok! ' + req.session.isLoggedIn );
 				res.redirect("/rules_info");
 			}else{
 				res.redirect('/');

@@ -3,6 +3,7 @@
         <meta charset="utf-8"> 
         <link rel= 'stylesheet' href='bootstrap/css/bootstrap.css'  type='text/css'/>
         <script src='js/all.js'></script>
+        <script type="text/javascript" src="js/countdown.js"></script>
         <script src="/socket.io/socket.io.js"></script>
     </head>
     <body background="/img/dirty_old_shirt.png">
@@ -41,6 +42,24 @@
     </body>
     <script>
         var socket = io.connect();
+        
+        /* timer metod */
+
+        function startTime(){
+            var target_date =  parseInt(<%= timer %>);
+            var hours, minutes, seconds;
+            setInterval(function () {
+                seconds_left = (target_date) / 1000;
+                days = parseInt(seconds_left / 86400);
+                seconds_left = seconds_left % 86400;
+                hours = parseInt(seconds_left / 3600);
+                seconds_left = seconds_left % 3600;
+                minutes = parseInt(seconds_left / 60);
+                seconds = parseInt(seconds_left % 60);
+                if( seconds_left <= 0){
+                }
+            }, 1000);
+        }
 
         /*     emit part */
 
@@ -49,7 +68,7 @@
             if( !answer ){
                 alert('PLEASE PROVIDE ANSWER FIRST');
             }else{
-                socket.emit('check_answer', '<%= user_name %>','<%= digest %>' );
+                socket.emit('check_answer', '<%= user_name %>','<%= digest %>', answer );
             }
         });
 
@@ -65,10 +84,20 @@
 
         socket.on('update_leaderboard', function ( topers){
             // update leader board
+            $('#leaderboard').html('');
+            var list = "";
+            for (var i = 0; i < topers.length; i++) {
+                list +=  i+1 + ". " + topers[i] + ' </br>';
+                //$('#leaderboard').append(list);
+            }
+            $('#leaderboard').html(list);
 
-            $('#leaderboard').append();
+        });
 
 
+        socket.on('next_level', function ( question_url, status){
+            $('#problem').attr('src', question_url);
+            $('#user_solution').val('');
         });
 
     </script>
