@@ -40,7 +40,7 @@ module.exports = function (io, db) {
 									//show new level image
 									Level.get_level_image(db,parseInt(current_level) + 1,function (err, image_url) {
 										if(!err) {
-											socket.emit('next_level', image_url, status);
+											socket.emit('next_level', image_url, parseInt(current_level) + 1, data[1], status);
 											User.get_top_users( db, function (err, top_users){
 												if( !err ){
 													console.log('alpha centuria' );
@@ -79,7 +79,7 @@ module.exports = function (io, db) {
 							console.log( "teah " + new_level);
 							Level.get_level_image(db,new_level,function (err, image_url) {
 								if(!err) {
-									socket.emit('next_level', image_url);
+									socket.emit('next_level', image_url, new_level, wildcard_count);
 									User.get_top_users( db, function (err, top_users){
 										if( !err ){
 											io.sockets.emit('update_leaderboard', top_users);

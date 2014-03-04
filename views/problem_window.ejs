@@ -50,9 +50,11 @@
             });
 
 
-            socket.on('next_level', function ( question_url){
+            socket.on('next_level', function ( question_url,new_level,wildcard_count){
                 $('#problem').attr('src', question_url);
                 $('#user_solution').val('');
+                $('.player_username').html(new_level);
+                $('.wildcard_count_show').html(wildcard_count);
             });
 
 
@@ -133,13 +135,18 @@
 <div class="row">
     <div class="col-lg-9 main-box">     
         <div class="row">
-            
+            <div class="col-lg-8 col-lg-offset-2">
+                <div class="row-custom">
+                    <span class="pull-left player_username"><%= user_name %></span>
+                    <span class="pull-right player_current_level">Level <%= current_level %></span>
+                </div>
+            </div>
 
         </div>
         <div class="row image-row">
 
             <div class="col-lg-8 col-lg-offset-2">
-                <img src='img/img3.jpg' id='problem' class="img-responsive img-height" >
+                <img src='img/img3.jpg ' id='problem' class="img-responsive img-height" >
             </div>
         </div>
         <div class="row">
@@ -152,7 +159,7 @@
             <div class="col-lg-8 col-lg-offset-2">
                 <div class="col-lg-6">
                     <button type="button" id='use_wildcard' class="btn btn-primary btn-block btn-lg btn-custom" name="use_wildcard" value="Wildcard Button" />
-                        Use WildCard
+                      <span class="badge wildcard_count_show"></span>  Use WildCard 
                     </button>        
                 </div>
                 <div class="col-lg-6">

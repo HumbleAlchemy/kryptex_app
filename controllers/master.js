@@ -40,7 +40,7 @@ module.exports = function(app,db) {
 							if( !err ){
 								Time.get_time(db, function (err, end_time){
 									if( !err ){
-										console.log( end_time);
+										console.log(end_time);
 										res.render('problem_window', {
 											user_name : user_name,
 											digest : digest, 
