@@ -4,26 +4,28 @@
 		<title> LOG IN </title>
 		<link href="stylesheet/signin.css" rel="stylesheet">
 		<link rel= 'stylesheet' href='bootstrap/css/bootstrap.min.css'  type='text/css'/>
+        <link rel= 'stylesheet' href='stylesheets/problem_window.css'  type='text/css'/>
+
 		<script src="js/all.js"></script>
 	</head>
-	<body background="img/use_your_illusion.png">
+	<body background="img/noisy_net.png">
+		<nav class="navbar navbar-custom" role="navigation">
+				<div class="container">
+					<div class="navbar-header">
+					    <h3 style="color:white" > <img src="img/kryptex.png" height="40" width="200" /> </h3>
+					</div>
+			    </div>
+			</nav>
 		<div class="container">
-			<div class="row">
-				<div class="col-lg-12">
-					<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-						<div class="navbar-header">
-						    <h3 style="color:white" >KRYPTEX</h3>
-						</div>
-					</nav>
-				</div>
-			</div>
-			</br></br></br></br></br></br></br>	
+			<br>
+			<br>
+			<br>
 			<div class="row" >
 				<form class="form-signin" role="form" action="/signin" method="post">
-					<h2 class="form-signin-heading" style="color:white"> <%= title %></h2>
+					<h2 class="form-signin-heading" style="color:white"> Login</h2>
 					<input type="text" class="form-control" placeholder="username" value='<%= user_name %>' style="padding:10px;margin-bottom: 10px;background: rgba(54, 25, 25, 0);color:#fff" name="user_name" required autofocus>
 					<input type="password" class="form-control" placeholder="password" name="user_password"  style="padding:10px;margin-bottom: 10px;background: rgba(54, 25, 25, 0);color:#fff" required >
-					<button class="btn btn-lg btn-inverse btn-block" type="submit" style="float:middle;"><span class="glyphicon glyphicon-log-in"></span> login</button>
+					<button class="btn btn-primary btn-lg btn-custom btn-block" type="submit" style="float:middle;"><span class="glyphicon glyphicon-log-in"></span> Login</button>
 				</form>
 			</div>
 				
