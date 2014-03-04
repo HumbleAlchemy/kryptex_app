@@ -1,12 +1,45 @@
 <html>
 <head>
-	
+	<link rel= 'stylesheet' href='bootstrap/css/bootstrap.css'  type='text/css'/>
+    <link rel= 'stylesheet' href='stylesheets/problem_window.css'  type='text/css'/>
+        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+    <script src='js/all.js'></script>   
 </head>
 <body>
-	<ul class="list">
-		<% for(var i = 0; i < list.length ; i += 2 ) { %>
-			<li> <%= list[i].slice(5) %> : <%= list[i+1] %> </li>
-		<% } %>
-	</ul>	
+	<div class="navbar navbar-custom">
+  <div class="container">
+    <div class="navbar-header">
+        <div class="navbar-brand"><img src="img/kryptex.png" height="40" width="200" /></div>
+      </div>
+    </div>    
+  </div>
+	<div class="row">
+		<div class="col-md-4 col-md-offset-4">
+			<ul class="list-unstyled">
+				<center>
+				<li class="ul-class"><h2>Leader Board</h2></li>				
+				</center>
+			</ul>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-4 col-md-offset-4">			
+			<ul class="list-unstyled leadbrd">
+				<% for(var i = 0; i < list.length ; i += 2 ) { %>
+					<li	class="list-group-item ul-class">
+						<% if( i == 0 || i == 2 || i == 4)  { %>
+                        	<i class="fa fa-trophy"></i>
+                        <% } %>
+					 <%= list[i].slice(5) %> 
+					<span class="badge pull-right"><%= list[i+1] %><span>
+					</li>
+				<% } %>
+			</ul>			
+		</div>
+	</div>
+
+
+
 </body>
 </html>

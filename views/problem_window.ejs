@@ -3,6 +3,7 @@
         <meta charset="utf-8"> 
         <link rel= 'stylesheet' href='bootstrap/css/bootstrap.css'  type='text/css'/>
         <link rel= 'stylesheet' href='stylesheets/problem_window.css'  type='text/css'/>
+        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
         <script src='js/all.js'></script>
         <script type="text/javascript" src="js/countdown.js"></script>
         <script src="/socket.io/socket.io.js"></script>
@@ -77,49 +78,6 @@
         });*/     
     </script>
     </head>
-
-    <!-- <body background="/img/dirty_old_shirt.png">
-        <form id='frm' action='/rank_list' method='get'></form>
-        <div class="container" >
-            <form role="form" method="post">
-                <h1 style='color:white'> WELCOME <%= user_name %> </h1>
-                <div style="float:left">
-                <script type="application/javascript">
-                    alert( <%= timer %>);
-                    var myCountdown2 = new Countdown({style:"flip",time: 10, width:100, height:40, rangeHi:"day", onComplete:complete_method});
-                </script>
-            </div>
-                </br>
-                </br>
-                <div class="row">
-                    <div class="col-lg-8">
-                        <img src='<%= image %>' id='problem' style="height:450px;width:100%;" >
-                    </div>
-                    <div class="col-lg-4" id='leaderboard' style='background:rgba(255, 255, 255, 0.2);color:#fff'>
-                        <% for( var i=0; i< top_users.length ; i++ ) {%>
-                            <%= i+1 %>. <%= top_users[i].slice(5) %>
-                            </br>
-                        <% } %>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-8">
-                        <input type='text' id='user_solution' class='form-control' style='margin-top:10px;height:42px;width:100%;background:rgba(255, 255, 255, 0.2);'placeholder='INSERT YOUR ANSWER HERE IN CAPITAL WITHOUT SPACES'>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="col-lg-6">
-                            <button class='btn btn-lg btn-success' id='submit_solution' style='height:42px;width:100%;margin-top:10px;' type='button' > SUBMIT </button>
-                        </div>
-                        <div class="col-lg-6">
-                            <button class='btn btn-lg btn-inverse' id='use_wildcard' style='margin-top:10px;height:42px;width:100%;' type='button' > Use Wildcard </button>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </body>
-     -->
-
      <body>
 <div class="navbar navbar-custom">
   <div class="container">
@@ -137,7 +95,7 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2">
                 <div class="row-custom">
-                    <span class="pull-left player_username"><%= user_name %></span>
+                    <span class="pull-left player_username"><span class="user-icon glyphicon glyphicon-user"></span><%= user_name %></span>
                     <span class="pull-right player_current_level">Level <%= current_level %></span>
                 </div>
             </div>
@@ -159,12 +117,12 @@
             <div class="col-lg-8 col-lg-offset-2">
                 <div class="col-lg-6">
                     <button type="button" id='use_wildcard' class="btn btn-primary btn-block btn-lg btn-custom" name="use_wildcard" value="Wildcard Button" />
-                      <span class="badge wildcard_count_show"></span>  Use WildCard 
+                      <span class="badge wildcard_count_show"><%= wildcard_count %></span>  Use WildCard 
                     </button>        
                 </div>
                 <div class="col-lg-6">
                     <button type="button" id='submit_solution' class="btn btn-primary btn-block btn-lg btn-custom" name="submit" value="Submit">
-                        Submit Answer
+                       <span class="user-icon glyphicon glyphicon-cloud-upload">Submit Answer
                     </button>  
                 </div>
             </div>          
@@ -187,10 +145,13 @@
         </div>
       <div class="">
             <ul class="list-unstyled leadbrd">
-                 <% for( var i=0; i< top_users.length ; i++ ) {%>
+                 <% for( var i=0; i< top_users.length ; i += 2 ) {%>
                     <li class="list-group-item ul-class" >  
+                        <% if( i == 0 || i == 2 || i == 4)  { %>
+                        <i class="fa fa-trophy"></i>
+                        <% } %>
                         <%= top_users[i].slice(5) %>
-                        <span class="badge"><%= i+1 %></span> 
+                        <span class="badge"><%= top_users[i+1] %></span> 
                     </li>
                             
                 <% } %>

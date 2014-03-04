@@ -213,6 +213,47 @@ margin:0;
    	box-shadow:          0 0 10px rgba(0,0,0,0.6);
 }
 
+.row-custom-rules {
+	border: 0px !important;
+	height: auto;
+	line-height: 40px;
+	padding-left: 10px !important;
+	padding-right: 10px !important;
+	margin-bottom: 10px;
+	font-size: 18px;
+	border-radius: 4px;
+	background-color: rgba(255,255,255,0.1) !important;
+	-moz-box-shadow:     0 0 10px rgba(0,0,0,0.6);
+   -webkit-box-shadow:  0 0 10px rgba(0,0,0,0.6);
+   	box-shadow:          0 0 10px rgba(0,0,0,0.6);
+}
+
+.fa {
+	margin-right: 5px;
+}
+
+.user-icon {
+	margin-right: 5px;
+}
+
+.rule-heading {
+	text-align: center;
+}
+
+.rules {
+	background-color: rgba(255,255,255,0.4);
+}
+
+.rule-button {
+	background-color: #1c1c1c;
+	border: none;
+	box-shadow: 0px 0px 4px rgba(0,0,0,0.4);
+}
+
+.rule-button:hover {
+	background-color: #4f4f4f;
+}
+
 /*
 .row-custom .badge {
 	font-size: 20px;
