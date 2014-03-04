@@ -26,7 +26,7 @@ module.exports = function(app,db) {
 		
 	});
 
-	app.get('/problem_window' ,isLoggedIn , function ( req, res) {
+	app.get('/problem_window' ,is_logged_in , function ( req, res) {
 		var user_name = req.session.userId;
 		var digest = util.get_hash( user_name);
 		User.get_current_level_and_wildcard_count( db, user_name, function ( err, current_level_wildcard_count){
@@ -65,11 +65,11 @@ module.exports = function(app,db) {
 		});
 	});
 
-	app.get('/rules_info', function (req, res){
+	app.get('/rules_info', is_logged_in ,function (req, res){
 		res.render('rules',{ user_name : req.session.userId, message : "You have been successfully registered" });
 	});
 	
-	app.get('/rank_list',function(req,res){
+	app.get('/rank_list',is_logged_in ,function(req,res){
 		User.get_full_rank_list(db,function(err,rank_list){
 			res.render('rank_list',{ list : rank_list });
 		});
@@ -110,7 +110,14 @@ module.exports = function(app,db) {
 			}else{
 				res.redirect('/');
 			}
-		});
+		}); 
+
+	});
+
+	app.post('/signout',is_logged_in,function(req,res){
+		console.log('sigining out');
+		req.session.destroy();
+		res.redirect('/');
 	});
 
 
@@ -122,19 +129,41 @@ module.exports = function(app,db) {
 			res.render("admin");
 	});
 
-	app.get('/admin/dashboard',function(req,res) {
+	app.get('/admin/dashboard',is_admin ,function(req,res) {
 		res.render('admin_dashboard');
 	});
 
 	app.post('/admin/signin',function(req,res){
-		User.check_user(db,	req.param('username'),req.param('password'),function(err,data) {
+		User.check_for_id(db,req.param('username'),function(err,exists){
 			if(!err) {
-				console.log(" : " + req.param('username') + " : " + req.param('password') + " : " + data);
-				res.redirect('/admin/dashboard');
+				if(exists) {	
+					User.check_user(db,	req.param('username'),req.param('password'),function(err,data) {
+						if(!err) {
+
+							//set session for middleware to check
+							req.session.isAdmin = true;
+							console.log(" : " + req.param('username') + " : " + req.param('password') + " : " + data);
+							res.redirect('/admin/dashboard');
+						} else {
+							consol.log("ERR in msater.js /admin/signin");
+						}
+					});					
+				} else {
+					User.adduser(db,'hashcode.aayaam14.gmail.com',req.param('password'),'admin',0,function(err,data){
+						if(!err) {
+							console.log('admin created');
+							res.redirect('/admin');
+						} else {
+							console.log('err in admin signin');
+						}
+					});
+					//res.send('No admin yet!');
+				}
 			} else {
-				consol.log("ERR in msater.js /admin/signin");
+				console.log("ERR from /admin/sigin " + err);
 			}
 		});
+
 			//check if admin exits
 			// -- if not redirect to signup
 			// -- if yes
@@ -142,7 +171,23 @@ module.exports = function(app,db) {
 			//res.redirect('/admin/dashboard');
 	});
 
-	app.post('/admin/dashboard/addlevel',function(req,res){
+	app.post('/admin/dashboard/start',is_admin ,function(){
+		//take in current time 
+		var now_time = (new Date).getTime();
+
+		//hard coding days for now, CHANGE LATER.
+		Time.set_time(db,now_time,3,function(err,status){
+			if(!err) {
+				console.log("successfully set times for kryptex: " + status);
+				res.redirect('/admin/dashboard');
+			} else {
+				console.log("from app.post(/admin/dashboard/start)" + err);
+			}
+		});	
+		
+	});
+
+	app.post('/admin/dashboard/addlevel',is_admin ,function(req,res){
 		console.log(req.param('levelImage'));
 
 		var fs = require('fs');
@@ -169,7 +214,7 @@ module.exports = function(app,db) {
 }
 
 // route middleware to make sure a user is logged in
-function isLoggedIn(req, res, next) {
+function is_logged_in(req, res, next) {
 
 	// if user is authenticated in the session, carry on 
 	if (req.session.isLoggedIn == true)
@@ -178,6 +223,16 @@ function isLoggedIn(req, res, next) {
 	// if they aren't redirect them to the home page
 	res.redirect('/');
 }
+
+function is_admin(req,res,next) {
+
+	if(req.session.isAdmin == true) 
+		return next();
+
+	res.redirect('/');
+}
+
+
 
 function isRestricted(req,res,next) {
 	res.send("Your Quiz is Over!");

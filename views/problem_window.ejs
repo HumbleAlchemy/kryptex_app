@@ -2,66 +2,72 @@
     <head>
         <meta charset="utf-8"> 
         <link rel= 'stylesheet' href='bootstrap/css/bootstrap.css'  type='text/css'/>
+        <link rel= 'stylesheet' href='stylesheets/problem_window.css'  type='text/css'/>
         <script src='js/all.js'></script>
         <script type="text/javascript" src="js/countdown.js"></script>
         <script src="/socket.io/socket.io.js"></script>
-    <script type="text/javascript">
-           var socket = io.connect();
-        /*startTime();*/
-        /*     emit part */
+        <script src="js/kryptjs.js"></script> 
+        <script type="text/javascript">
+        var socket = io.connect();
+        
+        $(document).ready(function(){
 
-        $('#submit_solution').click( function() {
-            var answer = $('#user_solution').val();    
-            if( !answer ){
-                alert('PLEASE PROVIDE ANSWER FIRST');
-            }else{
-                socket.emit('check_answer', '<%= user_name %>','<%= digest %>', answer );
+        
+            $('#submit_solution').click( function() {
+
+                var answer = $('#user_solution').val();    
+                if( !answer ){
+                    alert('PLEASE PROVIDE ANSWER FIRST');
+                }else{
+                    socket.emit('check_answer', '<%= user_name %>','<%= digest %>', answer );
+                }
+            });
+
+            $('#use_wildcard').click( function() {
+                socket.emit('use_wildcard', '<%= user_name %>','<%= digest %>' );
+            });
+
+            /*   handle part */
+
+            socket.on('wrong_solution', function (){
+                $('#user_solution').val('');
+            });
+
+            socket.on('no_wildcard_remain', function (){
+                alert(' NO WILDCARD LEFT FOR YOU ');
+            });
+
+            socket.on('update_leaderboard', function ( topers){
+                // update leader board
+                $('#leaderboard').html('');
+                var list = "";
+                for (var i = 0; i < topers.length; i++) {
+                    list +=  i+1 + ". " + topers[i] + ' </br>';
+                    //$('#leaderboard').append(list);
+                }
+                $('#leaderboard').html(list);
+
+            });
+
+
+            socket.on('next_level', function ( question_url){
+                $('#problem').attr('src', question_url);
+                $('#user_solution').val('');
+            });
+
+
+            socket.on('next_level', function ( question_url, status){
+                alert(question_url);
+                $('#problem').attr('src', question_url);            
+            });
+
+            function complete_method(){
+                alert('on Complete');
+                socket.emit('disconnet');
+                $('#frm').submit();
             }
         });
-
-        $('#use_wildcard').click( function() {
-            socket.emit('use_wildcard', '<%= user_name %>','<%= digest %>' );
-        });
-
-        /*   handle part */
-
-        socket.on('wrong_solution', function (){
-            $('#user_solution').val('');
-        });
-
-        socket.on('no_wildcard_remain', function (){
-            alert(' NO WILDCARD LEFT FOR YOU ');
-        });
-
-        socket.on('update_leaderboard', function ( topers){
-            // update leader board
-            $('#leaderboard').html('');
-            var list = "";
-            for (var i = 0; i < topers.length; i++) {
-                list +=  i+1 + ". " + topers[i] + ' </br>';
-                //$('#leaderboard').append(list);
-            }
-            $('#leaderboard').html(list);
-
-        });
-
-
-        socket.on('next_level', function ( question_url){
-            $('#problem').attr('src', question_url);
-            $('#user_solution').val('');
-        });
-
-
-        socket.on('next_level', function ( question_url, status){
-            alert(question_url);
-            $('#problem').attr('src', question_url);            
-        });
-
-        function complete_method(){
-            alert('on Complete');
-            socket.emit('disconnet');
-            $('#frm').submit();
-        }
+        
 
  /*       socket.on('close_connection', function (){
             socket.emit('disconnet');
@@ -70,7 +76,7 @@
     </script>
     </head>
 
-    <body background="/img/dirty_old_shirt.png">
+    <!-- <body background="/img/dirty_old_shirt.png">
         <form id='frm' action='/rank_list' method='get'></form>
         <div class="container" >
             <form role="form" method="post">
@@ -110,5 +116,87 @@
             </form>
         </div>
     </body>
-    
+     -->
+
+     <body>
+<div class="navbar navbar-custom">
+  <div class="container">
+    <div class="navbar-header">
+        <div class="navbar-brand"><img src="img/kryptex.png" height="40" width="200" /></div>
+      </div>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#"><h5>Sign out</h5></a></li>
+      </ul>
+    </div>    
+  </div>
+<form id='frm' action='/rank_list' method='get'></form>
+<div class="row">
+    <div class="col-md-9 main-box">     
+        <div class="row">
+      <div class="col-md-4">
+  
+      </div>      
+    </div>
+    <div class="row image-row">
+      <center>
+        <img src='<%= image %>' id='problem' class="img-h-w img-responsive img-sh" >
+        
+      </center>
+    </div>
+    <div class="row">
+      <center>
+        <input type="text" id="user_solution" class="form-control txt-width" placeholder="Enter Solution" >
+      </center>
+    </div>
+                
+    <div class="row">
+      <center>
+        <div class="col-md-6">
+          <button type="button" id='use_wildcard' class="btn btn-primary btn-lg btn-custom" name="use_wildcard" value="Wildcard Button" />
+            Use WildCard
+          </button>        
+        </div>
+        <div class="col-md-6">
+          <button type="button" id='submit_solution' class="btn btn-primary btn-lg btn-custom" name="submit" value="Submit">
+            Submit Answer
+          </button>  
+        </div>
+        
+      </center>          
+    </div>
+  </div>
+  <div class="col-md-3 nav-colr panal-margin" >
+    <div class="row clock">
+      <center>
+          <script type="application/javascript">
+                    //alert( <%= timer %>);
+                    var myCountdown2 = new Countdown({style:"flip",time: (<%= timer %>)/1000, width:200, height:60, rangeHi:"day", onComplete:complete_method});
+                </script>
+      </center>
+    </div>
+        <div class="row leader-board leader-height nav-colr" id="panal" >
+          <div class="leadboard-header">
+        <center>
+          <h2>Leader Board</h2>           
+        </center>
+        </div>
+      <div class="">
+            <ul class="list-unstyled leadbrd">
+                 <% for( var i=0; i< top_users.length ; i++ ) {%>
+                    <li class="list-group-item ul-class" >  
+                        <%= top_users[i].slice(5) %>
+                        <span class="badge"><%= i+1 %></span> 
+                    </li>
+                            
+                <% } %>
+            </ul>
+      </div>
+    </div>
+    <div class="leaderboard-hide pull-right" >
+            <input type="button" class=" btn btn-default hide-button" name="b1" value="Hide Leaderboard" onclick="" id="hide"/>
+             <input type="button" class=" btn btn-default hide-button" name="b1" value="Show Leaderboard" onclick="" id="show" style="display:none" />
+        </div>
+    </div>
+</div>
+</body>
 </html>

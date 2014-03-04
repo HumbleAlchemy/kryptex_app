@@ -38,6 +38,6 @@ function gen_salt() {
 	return salt;
 }
 
-var hash = get_hash('password');
+var hash = get_hash('admon773user');
 console.log(hash);
-console.log(match_hash('password',hash))
+console.log(match_hash('admon773user',hash))
