@@ -4,30 +4,31 @@
 		<title>Home</title>
 		<link href="stylesheet/button.css" rel="stylesheet">
 		<link href="stylesheet/signin.css" rel="stylesheet">
+        <link rel= 'stylesheet' href='stylesheets/problem_window.css'  type='text/css'/>
 		<link rel= 'stylesheet' href='bootstrap/css/bootstrap.min.css'  type='text/css'/>
 		<script src="js/all.js"></script>
 		<script src="/socket.io/socket.io.js"></script>
 	</head>
-	<body background="img/escheresque_ste.png">
+	<body background="img/noisy_net.png">
+		
+	
+			<nav class="navbar navbar-custom" role="navigation">
+				<div class="container">
+					<div class="navbar-header">
+					    <h3 style="color:white" > <img src="img/kryptex.png" height="40" width="200" /> </h3>
+					  
+					</div>
+				    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				      	<form class="navbar-form navbar-right" action='/login'>
+      		      		  	<button type="submit" class="btn navbar-btn btn-inverse" style="margin-left:7px">
+				      			<span class="glyphicon glyphicon-log-in"></span> Sign In
+				      		</button>
+				      	</form>
+				    </div>
+			    </div>
+			</nav>
+	
 		<div class="container">
-			<div class="row">
-				<div class="col-lg-12">
-					<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-						<div class="navbar-header">
-						    <h3 style="color:white" > KRYPTEX </h3>
-						    <h7 style="color:white" > Do You Have It In Your Grey Cell</h7>
-						</div>
-					    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-					      	<form class="navbar-form navbar-right" action='/login'>
-	      		      		  	<button type="submit" class="btn navbar-btn btn-inverse" style="margin-left:7px">
-					      			<span class="glyphicon glyphicon-log-in"></span> Sign In
-					      		</button>
-					      	</form>
-					    </div>
-					</nav>
-				</div>
-			</div>
-			</br></br></br></br></br></br></br></br>
 			<div class="row">
 				<div class="col-lg-2"></div>
 				<div class="col-lg-4" style="color:black" class="heading">
@@ -36,7 +37,7 @@
 				<div class="col-lg-2"></div>
 				<div class="col-lg-6 has-feedback">
 					<form class="form-signin " role="form" method="post" action="/signup" style="margin-padding: 20px;">
-						<h3 class="form-signin-heading"> SIGN-UP</h3>
+						<h3> Sign Up</h3>
 						<div class="has-feedback" id="ud">
 							<input type="text" placeholder="pick a username"  name="user_name" id="uid" class="form-control" style="padding:10px;margin-bottom: 10px;background: rgba(54, 25, 25, 0);color:#fff" required autofocus>
 						</div>
@@ -55,51 +56,50 @@
 				</div>
 			</div>	
 		</div>
-	</div>
-	</br>
-	</br></br></br></br>
+
 	</body>
 	<script>
-	        var socket = io.connect();
-	        var $j = jQuery.noConflict();
-	        $j(function(){
-	        	$j('#siu').click(function(){
-	                var user = $j('#uid').val();
-	                var email = $j('#eid').val();
-	                var passwd = $j('#passwd').val();
-	                var passwrd = $j('#xpasswd').val();
-	                if( passwd !== passwrd){
-	                	$j('#passwd').val('');
-	                    $j('#xpasswd').val('');
-	                }
-	            });
-	            $j('#uid').blur(function(){
-                    var name = $j('#uid').val();
-                    socket.emit('check_for_user_name',name);   
-            	});
-	            $j('#ph_no').blur(function(){
-	                var len = $j('#ph_no').val().length;
-	            	if( len != 10){
-	            		$j('#fd').addClass('has-error');
-	            		$j('#ph_no').val('');
-	            	}        
-	            });
-	         
-	            $j('#uid').click(function (){
-	            	$j('#ud').removeClass('has-error');
-	            	
-	            });
-	            $j('#ph_no').click(function (){
-	            	$j('#fd').removeClass('has-error');
-	            	
-	            });
-	        	
+		//alert(listenPort);
+        var socket = io.connect();
+        var $j = jQuery.noConflict();
+        $j(function(){
+        	$j('#siu').click(function(){
+                var user = $j('#uid').val();
+                var email = $j('#eid').val();
+                var passwd = $j('#passwd').val();
+                var passwrd = $j('#xpasswd').val();
+                if( passwd !== passwrd){
+                	$j('#passwd').val('');
+                    $j('#xpasswd').val('');
+                }
+            });
+            $j('#uid').blur(function(){
+                var name = $j('#uid').val();
+                socket.emit('check_for_user_name',name);   
+        	});
+            $j('#ph_no').blur(function(){
+                var len = $j('#ph_no').val().length;
+            	if( len != 10){
+            		$j('#fd').addClass('has-error');
+            		$j('#ph_no').val('');
+            	}        
+            });
+         
+            $j('#uid').click(function (){
+            	$j('#ud').removeClass('has-error');
+            	
+            });
+            $j('#ph_no').click(function (){
+            	$j('#fd').removeClass('has-error');
+            	
+            });
+        	
 
-	        });
+        });
 
-	        socket.on('invalid_user_name',function(val){
-	            $j('#ud').addClass('has-error');
-	            $j('#uid').val('');
-	        });
+        socket.on('invalid_user_name',function(val){
+            $j('#ud').addClass('has-error');
+            $j('#uid').val('');
+        });
 		</script>
 </html>

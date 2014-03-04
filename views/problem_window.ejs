@@ -61,14 +61,14 @@
                 $('#problem').attr('src', question_url);            
             });
 
-            function complete_method(){
+            
+        });
+        
+        function complete_method(){
                 alert('on Complete');
                 socket.emit('disconnet');
                 $('#frm').submit();
-            }
-        });
-        
-
+        }
  /*       socket.on('close_connection', function (){
             socket.emit('disconnet');
             $('#frm').submit();
@@ -131,46 +131,44 @@
   </div>
 <form id='frm' action='/rank_list' method='get'></form>
 <div class="row">
-    <div class="col-md-9 main-box">     
+    <div class="col-lg-9 main-box">     
         <div class="row">
-      <div class="col-md-4">
-  
-      </div>      
-    </div>
-    <div class="row image-row">
-      <center>
-        <img src='<%= image %>' id='problem' class="img-h-w img-responsive img-sh" >
-        
-      </center>
-    </div>
-    <div class="row">
-      <center>
-        <input type="text" id="user_solution" class="form-control txt-width" placeholder="Enter Solution" >
-      </center>
-    </div>
+            
+
+        </div>
+        <div class="row image-row">
+
+            <div class="col-lg-8 col-lg-offset-2">
+                <img src='img/img3.jpg' id='problem' class="img-responsive img-height" >
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2">
+                <input type="text" id="user_solution" class="form-control txt-width" placeholder="Enter Solution" >
+            </div>
+        </div>
                 
-    <div class="row">
-      <center>
-        <div class="col-md-6">
-          <button type="button" id='use_wildcard' class="btn btn-primary btn-lg btn-custom" name="use_wildcard" value="Wildcard Button" />
-            Use WildCard
-          </button>        
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2">
+                <div class="col-lg-6">
+                    <button type="button" id='use_wildcard' class="btn btn-primary btn-block btn-lg btn-custom" name="use_wildcard" value="Wildcard Button" />
+                        Use WildCard
+                    </button>        
+                </div>
+                <div class="col-lg-6">
+                    <button type="button" id='submit_solution' class="btn btn-primary btn-block btn-lg btn-custom" name="submit" value="Submit">
+                        Submit Answer
+                    </button>  
+                </div>
+            </div>          
         </div>
-        <div class="col-md-6">
-          <button type="button" id='submit_solution' class="btn btn-primary btn-lg btn-custom" name="submit" value="Submit">
-            Submit Answer
-          </button>  
-        </div>
-        
-      </center>          
-    </div>
-  </div>
-  <div class="col-md-3 nav-colr panal-margin" >
+    </div><!-- problem area -->
+  <div class="col-lg-3 nav-colr panal-margin" >
     <div class="row clock">
       <center>
           <script type="application/javascript">
                     //alert( <%= timer %>);
-                    var myCountdown2 = new Countdown({style:"flip",time: (<%= timer %>)/1000, width:200, height:60, rangeHi:"day", onComplete:complete_method});
+                    var myCountdown2 = new Countdown({style:"flip",time: parseInt(<%= timer %>)/1000, width:200, height:60, rangeHi:"day", onComplete:complete_method});
                 </script>
       </center>
     </div>
