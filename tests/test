@@ -1,0 +1,5 @@
+rpush level:0 img/img1.jpg 1
+rpush level:1 img/img2.jpg 2
+rpush level:2 img/img3.jpg 3
+rpush level:3 img/img4.jpg 4
+rpush level:4 img/img5.jpg 5

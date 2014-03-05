@@ -54,7 +54,7 @@ var io = require('socket.io').listen(server);
 io.enable('browser client minification'); // send minified client
 io.enable('browser client etag'); // apply etag caching logic based on version number
 io.enable('browser client gzip'); // gzip the file
-io.set('log level', 1);
+io.set('log level', 5);
 io.set('browser client expires',315360000); // reduce logging
 io.set('transports', [ // enable all transports (optional if you want flashsocket)
     'websocket'

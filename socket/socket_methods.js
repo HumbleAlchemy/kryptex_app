@@ -75,7 +75,7 @@ module.exports = function (io, db) {
 			if( Util.match_hash(user_name,digest) ){
 				User.use_wildcard(db,user_name,function (err, wildcard_count, new_level){
 					if(!err) {
-						if( wildcard_count > 0){
+						if( wildcard_count >= 0){
 							console.log( "teah " + new_level);
 							Level.get_level_image(db,new_level,function (err, image_url) {
 								if(!err) {

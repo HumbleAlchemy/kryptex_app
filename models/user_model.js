@@ -163,7 +163,7 @@ exports.use_wildcard = function(db,user_name,callback) {
 				}); // hmset
 			} else {
 				// no wildcard to use
-				callback(null,0,null);
+				callback(null,-1,counts[1]);
 			}	
 		} else {
 			console.log("ERR in user_model.use wildcard");
