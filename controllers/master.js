@@ -19,7 +19,7 @@ module.exports = function(app,db) {
 		if (!req.param('title')){
 			res.render('login', { title : 'login', user_name : ""});
 		}else if(!req.param('user_name')){
-			res.render('login', { title : req.param('title')});	
+			res.render('login', { title : req.param('title'), user_name : ""});	
 		}else{
 			res.render('login', { title : req.param('title'), user_name : req.param('user_name')});
 		}
@@ -91,10 +91,10 @@ module.exports = function(app,db) {
 				res.redirect('/problem_window');
 			}else if( data == 1){
 				console.log('user wrong!');
-				res.redirect('/login?title="Wrong Username"');
+				res.redirect('/login?title=Wrong Username');
 			}else{
 				console.log('password wrong!');
-				res.redirect( '/login?title="Wrong Password"&user_name=' + req.param('user_name'));
+				res.redirect( '/login?title=Wrong Password&user_name=' + req.param('user_name'));
 			}
 		});
 	});
