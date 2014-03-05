@@ -14,7 +14,7 @@ var RedisStore = require('connect-redis')(express);
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-app.use(express.favicon(__dirname + 'public/img/kryptex_fav.ico'));
+app.use(express.favicon(__dirname + '/public/img/kryptex_fav.ico'));
 app.use(express.bodyParser( { keepExtensions: true, uploadDir: __dirname + '/files' } ));
 app.use(express.logger('dev'));
 app.use(express.json());

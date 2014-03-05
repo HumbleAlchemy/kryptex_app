@@ -171,7 +171,7 @@ module.exports = function(app,db) {
 			//res.redirect('/admin/dashboard');
 	});
 
-	app.post('/admin/dashboard/start',is_admin ,function(){
+	app.post('/admin/dashboard/start',is_admin ,function(req,res){
 		//take in current time 
 		var now_time = (new Date).getTime();
 

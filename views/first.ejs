@@ -1,7 +1,7 @@
 <html>
 	<head>
 		<meta charset="utf-8"> 
-		<title>Home</title>
+		<title>Kryptex - Aayaam 2k14 | Do you have it in your grey cells</title>
 		<link href="stylesheet/button.css" rel="stylesheet">
 		<link href="stylesheet/signin.css" rel="stylesheet">
         <link rel= 'stylesheet' href='stylesheets/problem_window.css'  type='text/css'/>
@@ -12,11 +12,13 @@
 	<body background="img/noisy_net.png">
 		
 	
-			<nav class="navbar navbar-custom" role="navigation">
+			<div class="navbar navbar-custom">
 				<div class="container">
 					<div class="navbar-header">
-					    <h3 style="color:white" > <img src="img/kryptex.png" height="40"  /> </h3>
-					  
+						<div class="navbar-brand">
+                    		<img class="logo" src="img/gslogo.png" height="60">
+                   			<img src="img/kryptex.png" height="40" />
+                		</div>
 					</div>
 				    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				      	<form class="navbar-form navbar-right" action='/login'>
@@ -26,7 +28,7 @@
 				      	</form>
 				    </div>
 			    </div>
-			</nav>
+			</div>
 	
 		<div class="container">
 			<div class="row">
@@ -37,7 +39,7 @@
 				<div class="col-lg-2"></div>
 				<div class="col-lg-6 has-feedback">
 					<form class="form-signin " role="form" method="post" action="/signup" style="margin-padding: 20px;">
-						<h3> Sign Up</h3>
+						<h3 style="color: #eee;"> Sign Up</h3>
 						<div class="has-feedback" id="ud">
 							<input type="text" placeholder="pick a username"  name="user_name" id="uid" class="form-control" style="padding:10px;margin-bottom: 10px;background: rgba(54, 25, 25, 0);color:#fff" required autofocus>
 						</div>

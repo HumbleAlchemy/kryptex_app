@@ -1,6 +1,7 @@
 <html>
     <head>
         <meta charset="utf-8"> 
+        <title>Kryptex</title>
         <link rel= 'stylesheet' href='bootstrap/css/bootstrap.css'  type='text/css'/>
         <link rel= 'stylesheet' href='stylesheets/problem_window.css'  type='text/css'/>
         <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
@@ -13,12 +14,19 @@
         
         $(document).ready(function(){
 
+            function showNotification(message) {
+                $('.message_notification').show();
+                $('.message_notification').html(message).fadeOut(3500);
+                //$('.message_notification').hide();
+            }
         
             $('#submit_solution').click( function() {
 
                 var answer = $('#user_solution').val();    
                 if( !answer ){
-                    alert('PLEASE PROVIDE ANSWER FIRST');
+                    // alert('PLEASE PROVIDE ANSWER FIRST');
+                    showNotification('Please provide answer first!');
+                     
                 }else{
                     socket.emit('check_answer', '<%= user_name %>','<%= digest %>', answer );
                 }
@@ -35,7 +43,7 @@
             });
 
             socket.on('no_wildcard_remain', function (){
-                alert(' NO WILDCARD LEFT FOR YOU ');
+                showNotification('No wildcard remaining');
             });
 
             socket.on('update_leaderboard', function ( topers){
@@ -60,7 +68,7 @@
 
 
             socket.on('next_level', function ( question_url, status){
-                alert(question_url);
+                //alert(question_url);
                 $('#problem').attr('src', question_url);            
             });
 
@@ -68,7 +76,7 @@
         });
         
         function complete_method(){
-                alert('on Complete');
+                showNotification('Thansk for playing kryptex');
                 socket.emit('disconnet');
                 $('#frm').submit();
         }
@@ -79,19 +87,26 @@
     </script>
     </head>
      <body>
-<div class="navbar navbar-custom">
-  <div class="container">
-    <div class="navbar-header">
-        <div class="navbar-brand"><img src="img/kryptex.png" height="40" /></div>
-      </div>
-      <ul class="nav navbar-nav navbar-right">
-        <form action='/signout' method='post'>
-            <button class='btn btn-lg btn-default'><span class='glyphicon glyphicon-log-out'/>Signout</button>
-        </form>
-      </ul>
-    </div>    
-  </div>
-<form id='frm' action='/rank_list' method='get'></form>
+
+        <div class="message_notification">
+            
+        </div>
+        <div class="navbar navbar-custom">
+          <div class="container">
+            <div class="navbar-header">
+                <div class="navbar-brand">
+                    <img class="logo" src="img/gslogo.png" height="60">
+                    <img src="img/kryptex.png" height="40" />
+                </div>
+              </div>
+              <div class="nav navbar-nav navbar-right">
+                <form action='/signout' method='post'>
+                    <button class='btn btn-default btn-signout'><span class='glyphicon glyphicon-log-out'></span>Signout</button>
+                </form>
+              </div>
+            </div>    
+          </div>
+    <form id='frm' action='/rank_list' method='get'></form>
 <div class="row">
     <div class="col-lg-9 main-box">     
         <div class="row">
@@ -124,7 +139,7 @@
                 </div>
                 <div class="col-lg-6">
                     <button type="button" id='submit_solution' class="btn btn-primary btn-block btn-lg btn-custom" name="submit" value="Submit">
-                       <span class="user-icon glyphicon glyphicon-cloud-upload">Submit Answer
+                       <span class="user-icon glyphicon glyphicon-cloud-upload"></span>Submit Answer
                     </button>  
                 </div>
             </div>          
