@@ -35,6 +35,7 @@
 				<div class="col-lg-2"></div>
 				<div class="col-lg-4" style="color:black" class="heading">
 					<h1> KRYPTEX </h1>
+					<img src="img/frontlogo.jpg">
 				</div>
 				<div class="col-lg-2"></div>
 				<div class="col-lg-6 has-feedback">
@@ -62,7 +63,7 @@
 	</body>
 	<script>
 		//alert(listenPort);
-        var socket = io.connect();
+        var socket = io.connect(listenPort);
         var $j = jQuery.noConflict();
         $j(function(){
         	$j('#siu').click(function(){

@@ -10,7 +10,7 @@
         <script src="/socket.io/socket.io.js"></script>
         <script src="js/kryptjs.js"></script> 
         <script type="text/javascript">
-        var socket = io.connect();
+        var socket = io.connect(listenPort);
         
         $(document).ready(function(){
 
@@ -21,10 +21,13 @@
             }
         
             $('#submit_solution').click( function() {
-
+                $('.screen').show();
+                $('.loading').show();
                 var answer = $('#user_solution').val();    
                 if( !answer ){
                     // alert('PLEASE PROVIDE ANSWER FIRST');
+                    $('.loading').hide();
+                    $('.screen').hide();
                     showNotification('Please provide answer first!');
                      
                 }else{
@@ -33,16 +36,22 @@
             });
 
             $('#use_wildcard').click( function() {
+                $('.screen').show();
+                $('.loading').show();
                 socket.emit('use_wildcard', '<%= user_name %>','<%= digest %>' );
             });
 
             /*   handle part */
 
             socket.on('wrong_solution', function (){
+                $('.loading').hide();
+                $('.screen').hide();
                 $('#user_solution').val('');
             });
 
             socket.on('no_wildcard_remain', function (){
+                $('.loading').hide();
+                $('.screen').hide();
                 showNotification('No wildcard remaining');
             });
 
@@ -60,9 +69,11 @@
 
 
             socket.on('next_level', function ( question_url,new_level,wildcard_count){
+                $('.loading').hide();
+                $('.screen').hide();
                 $('#problem').attr('src', question_url);
                 $('#user_solution').val('');
-                $('.player_username').html(new_level);
+                $('.player_current_level').html(new_level);
                 $('.wildcard_count_show').html(wildcard_count);
             });
 
@@ -91,6 +102,8 @@
         <div class="message_notification">
             
         </div>
+        <div class="screen"></div>
+        <div class="loading"></div>
         <div class="navbar navbar-custom">
           <div class="container">
             <div class="navbar-header">
