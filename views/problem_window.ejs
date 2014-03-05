@@ -82,10 +82,12 @@
 <div class="navbar navbar-custom">
   <div class="container">
     <div class="navbar-header">
-        <div class="navbar-brand"><img src="img/kryptex.png" height="40" width="200" /></div>
+        <div class="navbar-brand"><img src="img/kryptex.png" height="40" /></div>
       </div>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#"><h5>Sign out</h5></a></li>
+        <form action='/signout' method='post'>
+            <button class='btn btn-lg btn-default'><span class='glyphicon glyphicon-log-out'/>Signout</button>
+        </form>
       </ul>
     </div>    
   </div>
