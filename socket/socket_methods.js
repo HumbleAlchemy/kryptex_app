@@ -42,7 +42,8 @@ module.exports = function (io, db) {
 									Level.get_level_image(db, incr_level, function (err, image_url) {
 										if(!err) {
 											Level.get_total_questions_count( db, function ( err, value){
-												if( value < incr_level){
+												console.log('value inside cehck_ans '+value);
+												if( value > incr_level){
 													socket.emit('next_level', image_url, parseInt(current_level) + 1, data[1], status);
 													User.get_top_users( db, function (err, top_users){
 														if( !err ){

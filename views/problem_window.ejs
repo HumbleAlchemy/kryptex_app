@@ -92,6 +92,7 @@
             });
 
             socket.emit('quiz_completed', function (){
+                alert('submit form');
                 $('#frm').submit();
             });
 
