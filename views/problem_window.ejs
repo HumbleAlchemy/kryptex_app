@@ -78,6 +78,11 @@
                 //alert(list);
             });
 
+            socket.emit('quiz_completed', function (){
+                $('#frm').submit();
+            });
+
+
 
             socket.on('next_level', function ( question_url,new_level,wildcard_count){
                 
