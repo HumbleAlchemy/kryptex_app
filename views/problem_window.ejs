@@ -14,6 +14,30 @@
     
     $(document).ready(function(){
 
+
+
+        $("#user_solution").keydown(function(e){
+            if (e.keyCode == 13){       
+                submit_answer();
+            }
+        });
+
+
+        function submit_answer(){
+            $('#screen').show();
+            $('#loading').show();
+            var answer = $('#user_solution').val();    
+            if( !answer ){
+                $('#loading').hide();
+                $('#screen').hide();
+                showNotification('Please provide answer first!');
+                
+            }else{
+                socket.emit('check_answer', '<%= user_name %>','<%= digest %>', answer );
+            }
+        }
+
+
         function showNotification(message) {
             $('.message_notification').show();
             $('.message_notification').html(message).fadeOut(3500);
@@ -21,18 +45,7 @@
             }
             
             $('#submit_solution').click( function() {
-                $('#screen').show();
-                $('#loading').show();
-                var answer = $('#user_solution').val();    
-                if( !answer ){
-                    // alert('PLEASE PROVIDE ANSWER FIRST');
-                    $('#loading').hide();
-                    $('#screen').hide();
-                    showNotification('Please provide answer first!');
-                    
-                }else{
-                    socket.emit('check_answer', '<%= user_name %>','<%= digest %>', answer );
-                }
+                submit_answer();
             });
 
             $('#use_wildcard').click( function() {
