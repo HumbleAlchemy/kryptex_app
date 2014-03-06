@@ -55,9 +55,8 @@ module.exports = function (io, db) {
 													});
 												}else{
 													socket.emit('quiz_completed');
-												}	
+												}
 											});
-											
 										} else {
 											console.log(err);
 										}
@@ -85,21 +84,33 @@ module.exports = function (io, db) {
 				User.use_wildcard(db,user_name,function (err, wildcard_count, new_level){
 					if(!err) {
 						if( wildcard_count >= 0){
-							console.log( "teah " + new_level);
-							Level.get_level_image(db,new_level,function (err, image_url) {
-								if(!err) {
-									socket.emit('next_level', image_url, new_level, wildcard_count);
-									User.get_top_users( db, function (err, top_users){
-										if( !err ){
-											io.sockets.emit('update_leaderboard', top_users);
-										}else{
-											console.log('err at check_answer inside update_leaderboard');
-										}
-									});
-								} else {
-									console.log(err);
+							Level.get_total_questions_count( db, function (err, value){
+								if( !err ){
+									if( value != new_level){
+										console.log( "teah " + new_level);
+										Level.get_level_image(db,new_level,function (err, image_url) {
+											if(!err) {
+												socket.emit('next_level', image_url, new_level, wildcard_count);
+												User.get_top_users( db, function (err, top_users){
+													if( !err ){
+														io.sockets.emit('update_leaderboard', top_users);
+													}else{
+														console.log('err at check_answer inside update_leaderboard');
+													}
+												});
+											} else {
+												console.log(err);
+											}
+										});
+									}else{
+										socket.emit('quiz_completed');
+									}
+								}else{
+									console.log(' ERR AT use_wildcard while getting get_total_questions_count');
 								}
 							});
+
+							
 						} else{
 							socket.emit('no_wildcard_remain');
 						}

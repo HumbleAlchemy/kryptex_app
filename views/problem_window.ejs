@@ -82,7 +82,7 @@
                         list += "<i class='fa fa-trophy'></i>";
                     } 
                     list += topers[i].slice(5);
-                    list += "<span class='badge'>" + topers[i+1].split('.')[0] + "</span>"; 
+                    list += "<span class='badge'>" + Math.floor(topers[i+1]) + "</span>"; 
                     list += "</li>";
                     //list +=  i+1 + ". " + topers[i] + ' </br>';
                 }
@@ -91,8 +91,7 @@
                 //alert(list);
             });
 
-            socket.emit('quiz_completed', function (){
-                alert('submit form');
+            socket.on('quiz_completed', function (){
                 $('#frm').submit();
             });
 
@@ -149,6 +148,13 @@ function complete_method(){
             <form action='/signout' method='post'>
                 <button class='btn btn-default btn-signout'><span class='glyphicon glyphicon-log-out'></span>Signout</button>
             </form>
+        </div>
+        <div class="nav navbar-nav navbar-left">
+            <form action='/rules_info' method='get'>
+                <button class='btn btn-default btn-signout btn-custom'style='color:white'><span style='color:white' class='glyphicon glyphicon-list-alt'></span>Rules</button>
+            </form>
+            
+            
         </div>
     </div>    
 </div>
@@ -214,7 +220,7 @@ function complete_method(){
                 <i class="fa fa-trophy"></i>
                 <% } %>
                 <%= top_users[i].slice(5) %>
-                <span class="badge"><%= top_users[i+1] %></span> 
+                <span class="badge"><%= Math.floor(top_users[i+1]) %></span> 
             </li>
             
             <% } %>
