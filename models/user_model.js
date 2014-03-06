@@ -91,8 +91,19 @@ exports.check_for_id = function(db, user_name,callback){
 	});
 };
 
-/*change user score */
+/*change user score based on timestamp */
+exports.increment_user_score_by_timestamp = function(db,user_name,callback) {
+	var timestamp = ((new Date(2016,0,1)).getTime() - (new Date()).getTime());
+	db.zscore(scoreSchema.set_name,"user:" + user_name,function(err,current_score){
+		if(!err) {
 
+		} else {
+			console.log(err,null);
+		}
+	});
+}
+
+exports.increment_user_score_by_timestamp = increment_user_score_by_timestamp;
 
 
 exports.increment_user_score = function(db,user_name,callback) {
@@ -190,7 +201,7 @@ exports.get_wildcard_count = function(db,user_name,callback) {
 module.exports.get_top_users = function (db, callback){
 	db.zrangebyscore( scoreSchema.set_name, scoreSchema.lower_limit, scoreSchema.upper_limit, "withscores", "LIMIT",0,10,function (err, top_users){
 		if( !err){
-			callback( null, top_users.reverse());
+			callback( null, top_users);
 		}else{
 			callback(1, null);
 		}
