@@ -11,6 +11,10 @@ var scoresSchema = {
 	lower_limit : "-inf"
 };
 
+var count_questionSchema = {
+	set_name : "level_count"
+};
+
 module.exports.add_level = function() {
 
 }
@@ -53,7 +57,7 @@ module.exports.check_level_solution = function(db,user_solution,level_no,callbac
 
 module.exports.get_total_questions_count = function (db, callback){
 	// module to get the count of total questions presenet inside scores key
-	db.zcard( scoresSchema.set_name, function (err, count){
+	db.get( count_questionSchema.set_name, function (err, count){
 		if( !err ){
 			callback( null, count);
 		}else{
