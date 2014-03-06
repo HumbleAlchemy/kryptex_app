@@ -117,6 +117,8 @@ module.exports = function(app,db) {
 	app.post('/signout',is_logged_in,function(req,res){
 		console.log('sigining out');
 		req.session.destroy();
+		// "Expires: Sat, 26 Jul 1997 05:00:00 GMT"
+		res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0','Expires','Sat, 26 Jul 2011 05:00:00 GMT');
 		res.redirect('/');
 	});
 

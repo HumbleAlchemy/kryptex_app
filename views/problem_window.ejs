@@ -1,25 +1,25 @@
 <html>
-    <head>
-        <meta charset="utf-8"> 
-        <title>Kryptex</title>
-        <link rel= 'stylesheet' href='bootstrap/css/bootstrap.css'  type='text/css'/>
-        <link rel= 'stylesheet' href='stylesheets/problem_window.css'  type='text/css'/>
-        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
-        <script src='js/all.js'></script>
-        <script type="text/javascript" src="js/countdown.js"></script>
-        <script src="/socket.io/socket.io.js"></script>
-        <script src="js/kryptjs.js"></script> 
-        <script type="text/javascript">
-        var socket = io.connect(listenPort);
-        
-        $(document).ready(function(){
+<head>
+    <meta charset="utf-8"> 
+    <title>Kryptex</title>
+    <link rel= 'stylesheet' href='bootstrap/css/bootstrap.css'  type='text/css'/>
+    <link rel= 'stylesheet' href='stylesheets/problem_window.css'  type='text/css'/>
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <script src='js/all.js'></script>
+    <script type="text/javascript" src="js/countdown.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/kryptjs.js"></script> 
+    <script type="text/javascript">
+    var socket = io.connect(listenPort);
+    
+    $(document).ready(function(){
 
-            function showNotification(message) {
-                $('.message_notification').show();
-                $('.message_notification').html(message).fadeOut(3500);
+        function showNotification(message) {
+            $('.message_notification').show();
+            $('.message_notification').html(message).fadeOut(3500);
                 //$('.message_notification').hide();
             }
-        
+            
             $('#submit_solution').click( function() {
                 $('#screen').show();
                 $('#loading').show();
@@ -29,7 +29,7 @@
                     $('#loading').hide();
                     $('#screen').hide();
                     showNotification('Please provide answer first!');
-                     
+                    
                 }else{
                     socket.emit('check_answer', '<%= user_name %>','<%= digest %>', answer );
                 }
@@ -61,15 +61,15 @@
                 // update leader board
                 //$('#leaderboard').html('');
                 //alert($('#leaderboard').html());
-                 
+                
                 var list = "";
                 for (var i = 0; i < topers.length; i += 2) {
                     list += "<li class='list-group-item ul-class' >"; 
-                        if( i == 0 || i == 2 || i == 4)  { 
-                            list += "<i class='fa fa-trophy'></i>";
-                         } 
-                        list += topers[i].slice(5);
-                        list += "<span class='badge'>" + topers[i+1] + "</span>"; 
+                    if( i == 0 || i == 2 || i == 4)  { 
+                        list += "<i class='fa fa-trophy'></i>";
+                    } 
+                    list += topers[i+1].slice(5);
+                    list += "<span class='badge'>" + topers[i] + "</span>"; 
                     list += "</li>";
                     //list +=  i+1 + ". " + topers[i] + ' </br>';
                 }
@@ -99,41 +99,41 @@
 
             
         });
-        
-        function complete_method(){
-                showNotification('Thansk for playing kryptex');
-                socket.emit('disconnet');
-                $('#frm').submit();
-        }
+
+function complete_method(){
+    showNotification('Thansk for playing kryptex');
+    socket.emit('disconnet');
+    $('#frm').submit();
+}
  /*       socket.on('close_connection', function (){
             socket.emit('disconnet');
             $('#frm').submit();
         });*/     
-    </script>
-    </head>
-     <body>
+</script>
+</head>
+<body>
 
-        <div class="message_notification">
-            
+    <div class="message_notification">
+        
+    </div>
+    <div id="screen"></div>
+    <div id="loading"></div>
+    <div class="navbar navbar-custom">
+      <div class="container">
+        <div class="navbar-header">
+            <div class="navbar-brand">
+                <img class="logo" src="img/gslogo.png" height="60">
+                <img src="img/kryptex.png" height="40" />
+            </div>
         </div>
-        <div id="screen"></div>
-        <div id="loading"></div>
-        <div class="navbar navbar-custom">
-          <div class="container">
-            <div class="navbar-header">
-                <div class="navbar-brand">
-                    <img class="logo" src="img/gslogo.png" height="60">
-                    <img src="img/kryptex.png" height="40" />
-                </div>
-              </div>
-              <div class="nav navbar-nav navbar-right">
-                <form action='/signout' method='post'>
-                    <button class='btn btn-default btn-signout'><span class='glyphicon glyphicon-log-out'></span>Signout</button>
-                </form>
-              </div>
-            </div>    
-          </div>
-    <form id='frm' action='/rank_list' method='get'></form>
+        <div class="nav navbar-nav navbar-right">
+            <form action='/signout' method='post'>
+                <button class='btn btn-default btn-signout'><span class='glyphicon glyphicon-log-out'></span>Signout</button>
+            </form>
+        </div>
+    </div>    
+</div>
+<form id='frm' action='/rank_list' method='get'></form>
 <div class="row">
     <div class="col-lg-9 main-box">     
         <div class="row">
@@ -156,57 +156,57 @@
                 <input type="text" id="user_solution" class="form-control txt-width" placeholder="Enter Solution" >
             </div>
         </div>
-                
+        
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2">
                 <div class="col-lg-6">
                     <button type="button" id='use_wildcard' class="btn btn-primary btn-block btn-lg btn-custom" name="use_wildcard" value="Wildcard Button" />
-                      <span class="badge" id="wildcard_count_show"><%= wildcard_count %></span>  Use WildCard 
-                    </button>        
-                </div>
-                <div class="col-lg-6">
-                    <button type="button" id='submit_solution' class="btn btn-primary btn-block btn-lg btn-custom" name="submit" value="Submit">
-                       <span class="user-icon glyphicon glyphicon-cloud-upload"></span>Submit Answer
-                    </button>  
-                </div>
-            </div>          
-        </div>
-    </div><!-- problem area -->
-  <div class="col-lg-3 nav-colr panal-margin" >
+                    <span class="badge" id="wildcard_count_show"><%= wildcard_count %></span>  Use WildCard 
+                </button>        
+            </div>
+            <div class="col-lg-6">
+                <button type="button" id='submit_solution' class="btn btn-primary btn-block btn-lg btn-custom" name="submit" value="Submit">
+                 <span class="user-icon glyphicon glyphicon-cloud-upload"></span>Submit Answer
+             </button>  
+         </div>
+     </div>          
+ </div>
+</div><!-- problem area -->
+<div class="col-lg-3 nav-colr panal-margin" >
     <div class="row clock">
       <center>
           <script type="application/javascript">
                     //alert( <%= timer %>);
                     var myCountdown2 = new Countdown({style:"flip",time: parseInt(<%= timer %>)/1000, width:200, height:60, rangeHi:"day", onComplete:complete_method});
-                </script>
-      </center>
-    </div>
-        <div class="row leader-board leader-height nav-colr" id="panal" >
-          <div class="leadboard-header">
-        <center>
-          <h2>Leader Board</h2>           
-        </center>
-        </div>
-      <div class="">
+                    </script>
+                </center>
+            </div>
+            <div class="row leader-board leader-height nav-colr" id="panal" >
+              <div class="leadboard-header">
+                <center>
+                  <h2>Leader Board</h2>           
+              </center>
+          </div>
+          <div class="">
             <ul class="list-unstyled leadbrd" id="leaderboard">
-                 <% for( var i=0; i< top_users.length ; i += 2 ) {%>
-                    <li class="list-group-item ul-class" >  
-                        <% if( i == 0 || i == 2 || i == 4)  { %>
-                        <i class="fa fa-trophy"></i>
-                        <% } %>
-                        <%= top_users[i].slice(5) %>
-                        <span class="badge"><%= top_users[i+1] %></span> 
-                    </li>
-                            
+               <% for( var i=0; i< top_users.length ; i += 2 ) {%>
+               <li class="list-group-item ul-class" >  
+                <% if( i == 0 || i == 2 || i == 4)  { %>
+                <i class="fa fa-trophy"></i>
                 <% } %>
-            </ul>
-      </div>
+                <%= top_users[i].slice(5) %>
+                <span class="badge"><%= top_users[i+1] %></span> 
+            </li>
+            
+            <% } %>
+        </ul>
     </div>
-    <div class="leaderboard-hide pull-right" >
-            <input type="button" class=" btn btn-default hide-button" name="b1" value="Hide Leaderboard" onclick="" id="hide"/>
-             <input type="button" class=" btn btn-default hide-button" name="b1" value="Show Leaderboard" onclick="" id="show" style="display:none" />
-        </div>
-    </div>
+</div>
+<div class="leaderboard-hide pull-right" >
+    <input type="button" class=" btn btn-default hide-button" name="b1" value="Hide Leaderboard" onclick="" id="hide"/>
+    <input type="button" class=" btn btn-default hide-button" name="b1" value="Show Leaderboard" onclick="" id="show" style="display:none" />
+</div>
+</div>
 </div>
 </body>
 </html>
