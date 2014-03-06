@@ -165,7 +165,7 @@ exports.use_wildcard = function(db,user_name,callback) {
 							} else {
 								console.log("err in use_wildcard > zincrby");		
 								callback(err,null,null);
-							}	 
+							}
 						}); //zincrby
 					
 					} else {

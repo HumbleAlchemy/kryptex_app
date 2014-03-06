@@ -38,17 +38,25 @@ module.exports = function (io, db) {
 							User.increment_user_score(db,user_name,function(err,data){
 								if(!err) {
 									//show new level image
-									Level.get_level_image(db,parseInt(current_level) + 1,function (err, image_url) {
+									var incr_level = parseInt(current_level) + 1;
+									Level.get_level_image(db, incr_level, function (err, image_url) {
 										if(!err) {
-											socket.emit('next_level', image_url, parseInt(current_level) + 1, data[1], status);
-											User.get_top_users( db, function (err, top_users){
-												if( !err ){
-													console.log('alpha centuria' );
-													io.sockets.emit('update_leaderboard', top_users);
+											Level.get_total_questions_count( db, function ( err, value){
+												if( value < incr_level){
+													socket.emit('next_level', image_url, parseInt(current_level) + 1, data[1], status);
+													User.get_top_users( db, function (err, top_users){
+														if( !err ){
+															console.log('alpha centuria' );
+															io.sockets.emit('update_leaderboard', top_users);
+														}else{
+															console.log('err at check_answer inside update_leaderboard');
+														}
+													});
 												}else{
-													console.log('err at check_answer inside update_leaderboard');
-												}
+													socket.emit('quiz_completed');
+												}	
 											});
+											
 										} else {
 											console.log(err);
 										}
