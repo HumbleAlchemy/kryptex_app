@@ -120,12 +120,11 @@ function increment_user_score_by_timestamp(db,user_name,callback) {
 exports.increment_user_score_by_timestamp = increment_user_score_by_timestamp;
 
 
-exports.increment_user_score = function(db,user_name,callback) {
+exports.increment_user_score = function(db,user_name,current_level,callback) {
 	increment_user_score_by_timestamp(db,user_name,function(err,status) {
 		if(!err) {
-			callback(null,1);
-			console.log("from icnrement_user_score" + status);
-			db.hset( userSchema.set_name + user_name,userSchema.current_level,status,function(err,status){
+			console.log("from icnrement_user_score" + current_level);
+			db.hset( userSchema.set_name + user_name,userSchema.current_level,parseInt(current_level) + 1,function(err,status){
 				if(!err) {
 					callback(null,status);
 				} else {

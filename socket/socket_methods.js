@@ -35,7 +35,7 @@ module.exports = function (io, db) {
 					console.log( " user_answer : " + user_answer + " >>>>>>> " + current_level );
 					Level.check_level_solution(db, user_answer,current_level,function(err,status){
 						if(status == true) {
-							User.increment_user_score(db,user_name,function(err,data){
+							User.increment_user_score(db,user_name,current_level,function(err,data){
 								if(!err) {
 									//show new level image
 									var incr_level = parseInt(current_level) + 1;
