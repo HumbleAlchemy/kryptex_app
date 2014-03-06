@@ -92,11 +92,23 @@ exports.check_for_id = function(db, user_name,callback){
 };
 
 /*change user score based on timestamp */
-exports.increment_user_score_by_timestamp = function(db,user_name,callback) {
+function increment_user_score_by_timestamp(db,user_name,callback) {
 	var timestamp = ((new Date(2016,0,1)).getTime() - (new Date()).getTime());
 	db.zscore(scoreSchema.set_name,"user:" + user_name,function(err,current_score){
 		if(!err) {
-
+			var level_score = current_score.split('.')[0];
+			var new_score = parseInt(level_score) + 1 + '.' + timestamp;
+			console.log("increment_user_score_by_timestamp new_score: " + new_score);
+			
+			db.zadd(scoreSchema.set_name, new_score, "user:" + user_name,function(err,status){
+				if(!err) {
+					console.log("inside  increment_user_score_by_timestamp:zadd "+ status);
+					callback(null,status);
+				} else {
+					console.log("ERR in increment_user_score_by_timestamp");
+					callback(err,null);
+				}
+			});
 		} else {
 			console.log(err,null);
 		}
@@ -107,7 +119,7 @@ exports.increment_user_score_by_timestamp = increment_user_score_by_timestamp;
 
 
 exports.increment_user_score = function(db,user_name,callback) {
-	db.zincrby(scoreSchema.set_name,1,"user:" + user_name,function(err,status) {
+	db.increment_user_score_by_timestamp(scoreSchema.set_name,user_name,function(err,status) {
 		if(!err) {
 			callback(null,1);
 			console.log("from icnrement_user_score" + status);
@@ -158,7 +170,7 @@ exports.use_wildcard = function(db,user_name,callback) {
 				db.hmset(userSchema.set_name + user_name, userSchema.wildcard_count, new_wildcard_count, userSchema.current_level, new_current_level, function (err,status){
 					if(!err) {
 						console.log("user status: " + status);
-						db.zincrby(scoreSchema.set_name,1,"user:" + user_name,function (err,status){
+						increment_user_score_by_timestamp(scoreSchema.set_name,user_name,function (err,status){
 							if(!err) {
 								console.log("use_wildcard > zincrby: " + new_wildcard_count);
 								callback(null, new_wildcard_count,new_current_level);
