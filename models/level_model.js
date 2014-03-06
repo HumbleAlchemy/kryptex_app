@@ -5,6 +5,11 @@ var LevelSchema = {
 	solution : 1
 }
 
+var scoresSchema = {
+	set_name : "scores",
+	upper_limit : "+inf",
+	lower_limit : "-inf"
+};
 
 module.exports.add_level = function() {
 
@@ -41,6 +46,18 @@ module.exports.check_level_solution = function(db,user_solution,level_no,callbac
 		} else {
 			console.log("ERROR: level_model.js , get_level module");
 			callback(err,null);
+		}
+	});
+}
+
+
+module.exports.get_total_questions_count = function (db, callback){
+	// module to get the count of total questions presenet inside scores key
+	db.zcard( scoresSchema.set_name, function (err, count){
+		if( !err ){
+			callback( null, count);
+		}else{
+			callback( 1, null);
 		}
 	});
 }
